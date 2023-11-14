@@ -1,13 +1,12 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/LU25kJIG)
-# G***NroGrupo***_***Apellido1******Apellido2***
-  "Breve descripción del trabajo"
+# G24***_***Stigliano******Touzet***
+  "Tp IRI Gimnasio Musculito"
 
 ## Integrantes
-- Alumno 1
-- Alumno 2
+- Valentina Stigliano
+- Luciana Milagros Touzet
 
 ## Objetivo del proyecto
-"Descripción del problema y el objetivo del desarrollo del proyecto"
+"Optimizacion de la administracion de reservas de un gimnasio"
 
 ## Requisitos
 "Explicación de requisitos, librerias y explicaciones de uso"
