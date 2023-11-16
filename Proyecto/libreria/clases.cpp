@@ -109,7 +109,7 @@ int ContarClases(ifstream& archivo, int realCantClases) {
     return cantClases;
 }
 
-eTurnos ClienteRepetido(str *inscriptions, uint cant, str idClient){
+eTurnos ClienteRepetido(str *inscriptions, unsigned int cant, str idClient){
     str *inscripcion = (inscriptions);
     str *ultimaInscripcion = (inscriptions) + cant - 1;
     while (true) {
@@ -122,7 +122,7 @@ eTurnos ClienteRepetido(str *inscriptions, uint cant, str idClient){
     }
     return eTurnos::puedeAnotarse;
 }
-eTurnos HorarioRepetido(eReserva* reserva, uint cant, uint horario, str ID) {
+eTurnos HorarioRepetido(eReserva* reserva, unsigned int cant, unsigned int horario, str ID) {
     eReserva *aux = reserva;
     eReserva *ultima = (reserva) + cant - 1;
 
@@ -141,7 +141,7 @@ eTurnos HorarioRepetido(eReserva* reserva, uint cant, uint horario, str ID) {
     return eTurnos::HorarioDisponible;
 }
 
-eTurnos BuscarxReserva(eReserva* reservas, uint cant, uint ID) {
+eReserva BuscarxReserva(eReserva* reservas, unsigned int cant, unsigned int ID) {
     eReserva *aux = reservas;
     eReserva*ultimo = (reservas) + cant - 1;
     while (true) {
@@ -154,20 +154,20 @@ eTurnos BuscarxReserva(eReserva* reservas, uint cant, uint ID) {
     }
     return reservaNula;
 }
-eTurnos ClaseExistente(eReserva*reservas, uint cant, uint id) {
+eTurnos ClaseExistente(eReserva*reservas, unsigned int cant, unsigned int id) {
 
-    return BuscarxReserva(reservas, cant, id).idClase != "";
+    return BuscarxReserva(reservas, cant, id).idClase != " ";
 }
 
-eClass findClass(eClass *classes, uint cant, str idClass) {
-    eClass *aux = classes, *ultimo = (classes) + cant - 1;
+eClases findClass(eClases *clases, unsigned int cant, str idClase) {
+    eClases *aux = clases, *ultimo = (clases) + cant - 1;
     while (true) {
-        if (aux->idClass == idClass) {
+        if (aux->idClase == idClase) {
             return *aux;
         }
         if (aux == ultimo)
             break;
         aux++;
     }
-    return nullClass;
+    return ClaseNula;
 }

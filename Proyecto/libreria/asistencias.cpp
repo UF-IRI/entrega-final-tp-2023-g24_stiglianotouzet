@@ -56,9 +56,9 @@ eOperacion escribirAsistencias(ofstream &archivo, eAsistencia *asistencias, int 
     Asistencia *aux = asistencias;
 
     for (int i = 0; i < cant; i++) {
-        ArchivoAsistencia.write((char *)&aux[i].idCliente, sizeof(uint));
-        ArchivoAsistencia.write((char *)&aux[i].cantInscriptos, sizeof(uint));
-        for (uint j = 0; j < aux[i].cantInscriptos; j++) {
+        ArchivoAsistencia.write((char *)&aux[i].idCliente, sizeof(unsigned int));
+        ArchivoAsistencia.write((char *)&aux[i].cantInscriptos, sizeof(unsigned int));
+        for (unsigned int j = 0; j < aux[i].cantInscriptos; j++) {
             ArchivoAsistencia.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
         }
     }
@@ -75,12 +75,12 @@ int contarAsistencias(ifstream& Archivo){
     Archivo.seekg(0);
 
     int contAsistencias = -1;//empiezo en -1 por el encabezado
-    uint aux;
+    unsigned int aux;
     while (!Archivo.eof()) {
-        Archivo.read((char *)&aux, sizeof(uint));
-        Archivo.read((char *)&aux, sizeof(uint));
+        Archivo.read((char *)&aux, sizeof(unsigned int));
+        Archivo.read((char *)&aux, sizeof(unsigned int));
         eInscripcion auxInscripciones;
-        for (uint i = 0; i < aux; i++) {
+        for (unsigned int i = 0; i < aux; i++) {
             Archivo.read((char *)&auxInscripciones, sizeof(eInscripcion));
         }
         contAsistencias++;
@@ -99,9 +99,9 @@ eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant
     Asistencia *aux = asistencias;
 
     for (int i = 0; i < cant; i++) {
-        file.write((char *)&aux[i].idCliente, sizeof(uint));
-        file.write((char *)&aux[i].cantInscriptos, sizeof(uint));
-        for (uint j = 0; j < aux[i].cantInscriptos; j++) {
+        file.write((char *)&aux[i].idCliente, sizeof(unsigned int));
+        file.write((char *)&aux[i].cantInscriptos, sizeof(unsigned int));
+        for (unsigned int j = 0; j < aux[i].cantInscriptos; j++) {
             file.write((char *)&aux[i].CursosInscriptos[j],
                        sizeof(eInscripcion));
         }
@@ -110,7 +110,7 @@ eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant
     return eOperacion::funciono;
 }
 
-eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,uint cant,time_t hoy){
+eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,unsigned int cant,time_t hoy){
     ofstream ArchivoAsistencia(&"../../"[hoy]);
 }
 

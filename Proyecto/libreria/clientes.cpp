@@ -40,7 +40,7 @@ eLectura ArchivoClientes(eClientes* clientes,ifstream& archivo){
 }
 
 
-eClientes BuscarxID(eClientes* clientes,uint cant, str id) {
+eClientes BuscarxID(eClientes* clientes,unsigned int cant, str id) {
         eClientes* aux = clientes,
             * ultimo = (clientes) + cant - 1;
         while(true) {
@@ -54,7 +54,7 @@ eClientes BuscarxID(eClientes* clientes,uint cant, str id) {
         return clienteNulo;
 }
 
-bool existClient(eClientes* clientes,uint cant, str id){
+bool existClient(eClientes* clientes,unsigned int cant, str id){
 
         return BuscarxID(clientes,cant,id).id != "" ;
 }

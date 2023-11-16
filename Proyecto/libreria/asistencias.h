@@ -25,5 +25,5 @@ Asistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned 
 eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias);
 eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant);
 eLectura devolverAsistencia(ofstream &ArchivoAsistencia, eAsistencia* asistencias, int cant);
-eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,uint cant,time_t hoy);
+eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,unsigned int cant,time_t hoy);
 #endif // ASISTENCIAS_H

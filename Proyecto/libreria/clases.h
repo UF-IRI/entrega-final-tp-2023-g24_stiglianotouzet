@@ -15,9 +15,9 @@ struct clases{
 };typedef struct clases eClases;
 
 struct reserva{
-    uint idReserva;
+    unsigned int idReserva;
     str idClase;
-    uint Horario;
+    unsigned int Horario;
     str* Inscripciones;
     int cantInscripciones;
 };typedef struct reserva eReserva;
@@ -27,15 +27,15 @@ const eClases ClaseNula = { "","","",0};
 
 struct gimnasio {
     eClientes* clientes;
-    uint cantClientes;
+    unsigned int cantClientes;
     eAsistencia* asistencias;
-    uint cantAsistencias;
-    uint cantMaxasistencias;
+    unsigned int cantAsistencias;
+    unsigned int cantMaxasistencias;
     eClases* clases;
-    uint cantClases;
+    unsigned int cantClases;
     time_t hoy;
     eReserva* reservas;
-    uint cantReservas;
+    unsigned int cantReservas;
 };typedef struct gimnasio eGimnasio;
 
 enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-1, ClienteExistente=1, Clasenula=-1, Claseexistente=1,Horariorepetido=-1, HorarioDisponible=1};
@@ -45,8 +45,8 @@ eLectura ArchivoClases(eClases* clases,ifstream& archivo);
 //funcion de asignar cupo a las clases
 unsigned int asignarcupos(str clase);
 //funcion de fijarse si no esta repetido el cliente
-eTurnos ClienteRepetido(str *inscriptions, uint cant, str idClient);
+eTurnos ClienteRepetido(str *inscriptions, unsigned int cant, str idClient);
 
 
-eReservas estaClienteEnReserva(eGimnasio* gimnasio, str idCliente, str idClase);
+eReserva estaClienteEnReserva(eGimnasio* gimnasio, str idCliente, str idClase);
 #endif // CLASES_H
