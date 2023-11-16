@@ -144,6 +144,7 @@ eTurnos HorarioRepetido(eReserva* reserva, unsigned int cant, unsigned int horar
 eReserva BuscarxReserva(eReserva* reservas, unsigned int cant, unsigned int ID) {
     eReserva *aux = reservas;
     eReserva*ultimo = (reservas) + cant - 1;
+
     while (true) {
         if (aux->idReserva == ID) {
             return *aux;
@@ -154,20 +155,97 @@ eReserva BuscarxReserva(eReserva* reservas, unsigned int cant, unsigned int ID) 
     }
     return reservaNula;
 }
-eTurnos ClaseExistente(eReserva*reservas, unsigned int cant, unsigned int id) {
 
-    return BuscarxReserva(reservas, cant, id).idClase != " ";
+bool Clasexistente(eReserva *reserva, uint cant, uint ID) {
+
+    return BuscarxReserva(reserva, cant, ID).idClase != "";
 }
 
-eClases findClass(eClases *clases, unsigned int cant, str idClase) {
-    eClases *aux = clases, *ultimo = (clases) + cant - 1;
+
+eClases BuscarxClase(eClases *clases, unsigned int cant, str IDclase) {
+    eClases *aux = clases;
+    eClases*ultima = (clases) + cant - 1;
     while (true) {
-        if (aux->idClase == idClase) {
+        if (aux->idClase == IDclase) {
             return *aux;
         }
-        if (aux == ultimo)
+        if (aux == ultima)
             break;
         aux++;
     }
     return ClaseNula;
 }
+eTurnos bookClassGym(eGimnasio &gimnasio, uint idReserva, str IDcliente) {
+
+    eReserva ReservaClase;
+    ReservaClase= BuscarxReserva(gimnasio.reservas, gimnasio.cantReservas, idReserva);
+    eClases CantClases;//funciona para poner el numero de clases sacando las repetidas y musculacion
+    /*CantClases= BuscarxClase(gimnasio.clases, gimnasio.cantClases,ReservaClase.idReserva );*/
+
+
+    if (ReservaClase.idClase == "") {
+        return eTurnos::Clasenula;//la clase no existe
+
+    } else if (ReservaClase.cantInscripciones < gimnasio.clases->cupo) {
+        return eTurnos::Nohayespacio;//la clase no tiene espacio
+    }
+
+
+    if (!existeCliente(gimnasio.clientes, gimnasio.cantClientes, IDcliente)) {
+        return eTurnos::Clientenulo;//existe el cliente
+
+
+    } else if (HorarioRepetido(gimnasio.reservas, gimnasio.cantReservas, ReservaClase.Horario,IDcliente)) {
+        return eTurnos::Horariorepetido;//ya se inscribio en esa clase
+    }
+
+
+    time_t hoy = time(0);
+    uint dif = difftime(hoy, gimnasio.hoy) / 60 / 60 / 24;//si sigue siendo hoy, lo reservo en el archivo de hoy de ASISTENCIAS
+    if (dif >= 1) //eso significa que cambio de dia
+    {
+
+        gimnasio.hoy = hoy;//guardo las asistencias en el dia actual
+
+        stringstream iss;
+        str hora;
+        iss << hoy << ',' << endl;
+        getline(iss, hora, ',');
+        EscribirAsistenciaxdia(gimnasio.asistencias, gimnasio.cantAsistencias, hora);
+
+        resizeAsistencia(&gimnasio.asistencias, gimnasio.cantAsistencias, 0);
+        gimnasio.cantAsistencias = 0;//si necesito cambiar de dia necesito reiniciar la cant de asistencias para el otro dia
+    } else {
+        eInscripcion NuevaInscripcion = {idReserva,time(0)};
+        if (gimnasio.cantAsistencias < gimnasio.cantMaxasistencias) {
+            eAsistencia* asistencias;
+
+            asistencias=(gimnasio.asistencias, gimnasio.cantAsistencias, IDcliente);
+            if (asistencias->CursosInscriptos == nullptr) {
+                // crearla y agregar
+                eAsistencia nuevaAsistencia = {stoul(IDcliente),0,new eInscripcion[5]};
+                eInscripcion* nuevaAsistencia.CursosInscriptos = NuevaInscripcion;
+                agregarReserva(gimnasio.asistencias,gimnasio.cantAsistencias,nuevaAsistencia);
+            } else {
+                // agregar
+                if(assistance->cantInscriptos < DEFAULT_MAX_INSCRIPTIONS_ASSITANCES_CAPACITY){
+                    addInscriptionAssistance(assistance->CursosInscriptos,assistance->cantInscriptos,newInscription);
+                } else {
+                    return eBookClass::ErrMaxInscriptionsReachedInClass;
+                }
+            }
+        } else {
+            resizeAssistences(&gym.assistances, gym.countAssistances,
+                              gym.countMaxAssistances * 2);
+            gym.countAssistances = gym.countMaxAssistances * 2;
+            if (gym.assistances == nullptr) {
+                return eBookClass::ErrSpace;
+            }
+            bookClassGym(gym,idBook,idClient);
+        }
+    }
+    return eBookClass::SuccessBook;
+}
+
+
+

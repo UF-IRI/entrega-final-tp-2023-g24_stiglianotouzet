@@ -54,7 +54,7 @@ eClientes BuscarxID(eClientes* clientes,unsigned int cant, str id) {
         return clienteNulo;
 }
 
-bool existClient(eClientes* clientes,unsigned int cant, str id){
+bool existeCliente(eClientes* clientes,unsigned int cant, str id){
 
         return BuscarxID(clientes,cant,id).id != "" ;
 }

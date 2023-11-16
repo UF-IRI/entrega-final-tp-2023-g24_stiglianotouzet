@@ -88,6 +88,19 @@ int contarAsistencias(ifstream& Archivo){
     return contAsistencias;
 }
 
+eAsistencia* BuscarxAsistencia(eAsistencia* asistencias,uint cant ,str IDCliente) {
+    eAsistencia* aux = asistencias;
+        eAsistencia* ultima = (asistencias) +cant - 1;
+    while(true) {
+        if (aux->idCliente== stoul(IDCliente)) {
+            return aux;
+        }
+        if (aux == ultima)
+            break;
+        aux++;
+    }
+    return nullptr;
+}
 
 eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant) {
     ofstream ArchivoAsistencia("binary_file_out.bin", ios::binary);
@@ -112,6 +125,30 @@ eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant
 
 eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,unsigned int cant,time_t hoy){
     ofstream ArchivoAsistencia(&"../../"[hoy]);
+}
+eOperacion agregarReserva(eAsistencia* asistencias,uint cant ,eAsistencia asistencia){
+
+    *(asistencias + cant) = asistencia;
+
+    return eOperacion::funciono;
+}
+eOperacion EscribirDiaria(eAsistencia *asistencias, uint cant, str hoy) {
+    ofstream ArchivoAsistencias("../../asistencias_" + hoy,ios::binary);
+    if (!ArchivoAsistencias.is_open()) {
+        return eOperacion::nofuncion;
+    }
+    Asistencia *aux = asistencias;
+    if (ArchivoAsistencias.is_open()) {
+        for (uint i = 0; i < cant; i++) {
+            ArchivoAsistencias.write((char *)&aux[i].idCliente, sizeof(uint));
+            ArchivoAsistencias.write((char *)&aux[i].cantInscriptos, sizeof(uint));
+            for (uint j = 0; j < aux[i].cantInscriptos; j++) {
+                ArchivoAsistencias.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
+            }
+        }
+    }
+    ArchivoAsistencias.close();
+    return eOperacion::nofuncion;
 }
 
 

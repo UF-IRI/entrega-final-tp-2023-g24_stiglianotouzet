@@ -38,15 +38,24 @@ struct gimnasio {
     unsigned int cantReservas;
 };typedef struct gimnasio eGimnasio;
 
-enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-1, ClienteExistente=1, Clasenula=-1, Claseexistente=1,Horariorepetido=-1, HorarioDisponible=1};
+enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-1, ClienteExistente=1, Clasenula=-1, Claseexistente=1,Horariorepetido=-1, HorarioDisponible=1, Nohayespacio=-1};
 typedef enum turnos eTurnos;
 //funcion de leer el archivo de clases
 eLectura ArchivoClases(eClases* clases,ifstream& archivo);
 //funcion de asignar cupo a las clases
 unsigned int asignarcupos(str clase);
+//buscar por reserva
+eReserva BuscarxReserva(eReserva* reservas, unsigned int cant, unsigned int ID);
 //funcion de fijarse si no esta repetido el cliente
 eTurnos ClienteRepetido(str *inscriptions, unsigned int cant, str idClient);
-
-
+//fijarse si la clase existe
+bool Clasexistente(eReserva *reserva, uint cant, uint ID);
+//buscar por clase
+eClases BuscarxClase(eClases *clases, unsigned int cant, str IDclase);
+//fijarse si el cliente ya reservo esa clase
 eReserva estaClienteEnReserva(eGimnasio* gimnasio, str idCliente, str idClase);
+//horario repetido
+eTurnos HorarioRepetido(eReserva* reserva, unsigned int cant, unsigned int horario, str ID);
+//cliente repetido
+eTurnos ClienteRepetido(str *inscriptions, unsigned int cant, str idClient);
 #endif // CLASES_H
