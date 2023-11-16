@@ -18,17 +18,15 @@ eAsistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned
 }
 
 eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias){
-    // SABIENDO QUE ESTA ORDENADO EL ARCHIVO CLASES
     if(!ArchivoAsistencia.is_open())
         return eLectura::Errornoabrio;
-    //Setear inicio
     ArchivoAsistencia.clear();
     ArchivoAsistencia.seekg(0);
 
 
     eAsistencia* aux = asistencias;
 
-    while (!ArchivoAsistencia.eof())//mientras que no este en el ultimo
+    while (!ArchivoAsistencia.eof())
     {
         ArchivoAsistencia.read((char*)&aux->idCliente, sizeof( unsigned int));
         ArchivoAsistencia.read((char*)&aux->cantInscriptos, sizeof(unsigned int));
@@ -48,29 +46,9 @@ eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias)
 
     return eLectura::exitoabrio;
 }
-
-eLectura devolverAsistencia(ofstream &ArchivoAsistencia, eAsistencia* asistencias, int cant) {
-    ofstream outfile("binary_file_out.bin", ios::binary);
-    if (!outfile.is_open()) {
-        return eLectura::Errornoabrio;
-    }
-
-    eAsistencia* aux = asistencias;//creo un puntero aux que es igual a asistencias para que asistencias se modifique localmente
-
-    for (int i = 0; i < cant; i++) {
-        ArchivoAsistencia.write((char* )&aux[i].idCliente, sizeof(unsigned int));
-        ArchivoAsistencia.write((char*)&aux[i].cantInscriptos, sizeof(unsigned int));
-        for (unsigned int j = 0; j < aux[i].cantInscriptos; j++) {
-            ArchivoAsistencia.write((char *)&aux[i].CursosInscriptos[j],
-                       sizeof(eInscripcion));
-        }
-    }
-
-    return eLectura::exitoabrio;
-}
 eOperacion escribirAsistencias(ofstream &archivo, eAsistencia *asistencias, int cant) {
-    ofstream EscribirAsistencias("binary_file_out.bin", ios::binary);
-    if (!EscribirAsistencias.is_open()) {
+    ofstream ArchivoAsistencia("binary_file_out.bin", ios::binary);
+    if (!ArchivoAsistencia.is_open()) {
         cout << "Error no abrio" << endl;
         return eOperacion::nofuncion;
     }
@@ -78,27 +56,25 @@ eOperacion escribirAsistencias(ofstream &archivo, eAsistencia *asistencias, int 
     Asistencia *aux = asistencias;
 
     for (int i = 0; i < cant; i++) {
-        EscribirAsistencias.write((char *)&aux[i].idCliente, sizeof(uint));
-        EscribirAsistencias.write((char *)&aux[i].cantInscriptos, sizeof(uint));
+        ArchivoAsistencia.write((char *)&aux[i].idCliente, sizeof(uint));
+        ArchivoAsistencia.write((char *)&aux[i].cantInscriptos, sizeof(uint));
         for (uint j = 0; j < aux[i].cantInscriptos; j++) {
-            EscribirAsistencias.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
+            ArchivoAsistencia.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
         }
     }
 
     return eOperacion::funciono;
 }
 
-
 int contarAsistencias(ifstream& Archivo){
     if (!Archivo.is_open()) {
         cout << "el archivo no esta abierto" << endl;
         return 0;
     }
-    // reiniciar el file al inicio
     Archivo.clear();
     Archivo.seekg(0);
 
-    int contAsistencias = -1;
+    int contAsistencias = -1;//empiezo en -1 por el encabezado
     uint aux;
     while (!Archivo.eof()) {
         Archivo.read((char *)&aux, sizeof(uint));
@@ -112,9 +88,33 @@ int contarAsistencias(ifstream& Archivo){
     return contAsistencias;
 }
 
-eOperacion escribirAsistencias(eAsistencia* asistencias,uint cant,time_t hoy){
-    ofstream fileOutPut(&"../../"[hoy]);
+
+eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant) {
+    ofstream ArchivoAsistencia("binary_file_out.bin", ios::binary);
+    if (!ArchivoAsistencia.is_open()) {
+        cout << "Error de abertura de Archivo" << endl;
+        return eOperacion::nofuncion;
+    }
+
+    Asistencia *aux = asistencias;
+
+    for (int i = 0; i < cant; i++) {
+        file.write((char *)&aux[i].idCliente, sizeof(uint));
+        file.write((char *)&aux[i].cantInscriptos, sizeof(uint));
+        for (uint j = 0; j < aux[i].cantInscriptos; j++) {
+            file.write((char *)&aux[i].CursosInscriptos[j],
+                       sizeof(eInscripcion));
+        }
+    }
+
+    return eOperacion::funciono;
 }
+
+eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,uint cant,time_t hoy){
+    ofstream ArchivoAsistencia(&"../../"[hoy]);
+}
+
+
 
 
 

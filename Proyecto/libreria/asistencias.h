@@ -2,11 +2,11 @@
 #define ASISTENCIAS_H
 #include <iostream>
 #include <string>
-#include "clases.h"
-#include "clientes.h"
 #include <sstream>
 #include <fstream>
 #include <ctime>
+#include "clientes.h"
+
 using namespace std;
 enum Archivo{ ExitoAbrio=1, Noabrio=-1};
 typedef enum Archivo Archi;
@@ -23,6 +23,7 @@ struct Asistencia{
 
 Asistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned int nuevoTam);
 eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias);
+eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant);
 eLectura devolverAsistencia(ofstream &ArchivoAsistencia, eAsistencia* asistencias, int cant);
-eOperacion escribirAsistencias(ofstream &archivo, Asistencia *asistencias, int cant);
+eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,uint cant,time_t hoy);
 #endif // ASISTENCIAS_H

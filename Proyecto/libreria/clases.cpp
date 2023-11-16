@@ -53,3 +53,121 @@ eLectura ArchivoClases(eClases* clases,ifstream& archivo){
 
     return eLectura::exitoabrio;
 }
+int ContarClases(ifstream& archivo, int realCantClases) {
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo binario" <<endl;
+        return 0;
+    }
+
+    if (realCantClases != 0) {
+        realCantClases = 0;
+    }
+
+    // Reiniciar el archivo al inicio
+    archivo.clear();
+    archivo.seekg(0);
+
+    str linea;
+    int cantClases = 0;
+    str nombres = "";
+    str auxNombre;
+    char delim=',';
+
+    getline(archivo, linea); // Obtener encabezado
+
+    while (getline(archivo, linea)) {
+        std::istringstream iss(linea);
+        getline(iss, auxNombre, delim);
+        getline(iss, auxNombre, delim);
+        size_t pos = 0;
+        str token;
+        str nombreParaDividir = nombres;
+        bool encontrado = false;
+
+        if (nombreParaDividir.length() != 0) {
+            while ((pos = nombreParaDividir.find(',')) != string::npos) {
+                token = nombreParaDividir.substr(0, pos);
+                nombreParaDividir.erase(0, pos + 1);
+                if (token == auxNombre) {
+                    encontrado = true;
+                }
+            }
+
+            if (!encontrado && auxNombre.compare("Musculacion") != 0 &&
+                auxNombre.compare("") != 0) {
+                nombres += auxNombre + ',';
+                cantClases++;
+            }
+        } else {
+            nombres = auxNombre + ',';
+            cantClases++;
+        }
+
+        realCantClases++;
+    }
+
+    return cantClases;
+}
+
+eTurnos ClienteRepetido(str *inscriptions, uint cant, str idClient){
+    str *inscripcion = (inscriptions);
+    str *ultimaInscripcion = (inscriptions) + cant - 1;
+    while (true) {
+        if (*inscripcion == idClient) {
+            return eTurnos::estaAnotado;
+        }
+        if (inscripcion == ultimaInscripcion)
+            break;
+        inscripcion++;
+    }
+    return eTurnos::puedeAnotarse;
+}
+eTurnos HorarioRepetido(eReserva* reserva, uint cant, uint horario, str ID) {
+    eReserva *aux = reserva;
+    eReserva *ultima = (reserva) + cant - 1;
+
+    while (true) {
+
+        if (aux->Horario == horario) {
+            if (ClienteRepetido(aux->Inscripciones, aux->cantInscripciones,ID)) {
+                return eTurnos::Horariorepetido;
+            }
+        }
+
+        if (aux == ultima)
+            break;
+        aux++;
+    }
+    return eTurnos::HorarioDisponible;
+}
+
+eTurnos BuscarxReserva(eReserva* reservas, uint cant, uint ID) {
+    eReserva *aux = reservas;
+    eReserva*ultimo = (reservas) + cant - 1;
+    while (true) {
+        if (aux->idReserva == ID) {
+            return *aux;
+        }
+        if (aux == ultimo)
+            break;
+        aux++;
+    }
+    return reservaNula;
+}
+eTurnos ClaseExistente(eReserva*reservas, uint cant, uint id) {
+
+    return BuscarxReserva(reservas, cant, id).idClase != "";
+}
+
+eClass findClass(eClass *classes, uint cant, str idClass) {
+    eClass *aux = classes, *ultimo = (classes) + cant - 1;
+    while (true) {
+        if (aux->idClass == idClass) {
+            return *aux;
+        }
+        if (aux == ultimo)
+            break;
+        aux++;
+    }
+    return nullClass;
+}

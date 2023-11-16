@@ -40,43 +40,30 @@ eLectura ArchivoClientes(eClientes* clientes,ifstream& archivo){
 }
 
 
-
-
-
-
-
-/*void ArchDevolverClientes(eClientes* clientes, ifstream& archivo){
-
-        str header;
-
-        getline(archivo, header);
-        eClientes* aux = clientes;
-        while (archivo.good()) {
-            str linea;
-            getline(archivo, linea);
-            if(archivo.eof())
+eClientes BuscarxID(eClientes* clientes,uint cant, str id) {
+        eClientes* aux = clientes,
+            * ultimo = (clientes) + cant - 1;
+        while(true) {
+            if (aux->id == id ) {
+                return *aux;
+            }
+            if (aux == ultimo)
                 break;
-            char delimitador = ',';
-            string idCliente, nombre, apellido, email, telefono, fechaNac, estado;
-            std::istringstream iss(linea);
-            getline(iss, idCliente, delimitador);
-            getline(iss, nombre, delimitador);
-            getline(iss, apellido, delimitador);
-            getline(iss, email, delimitador);
-            getline(iss, telefono, delimitador);
-            getline(iss, fechaNac, delimitador);
-            getline(iss, estado, delimitador);
-            aux->id = idCliente;
-            aux->nombre = nombre;
-            aux->correo  = email;
-            aux->apellido  = apellido;
-            aux->telefono  = telefono;
-            aux->fechaNac  = fechaNac;
-            aux->estado  = stoi(estado);
             aux++;
         }
-        clientes=aux;
-        delete [] aux;
+        return clienteNulo;
+}
+
+bool existClient(eClientes* clientes,uint cant, str id){
+
+        return BuscarxID(clientes,cant,id).id != "" ;
+}
 
 
-}*/
+
+
+
+
+
+
+
