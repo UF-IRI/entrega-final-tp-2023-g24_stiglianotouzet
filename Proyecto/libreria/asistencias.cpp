@@ -68,5 +68,53 @@ eLectura devolverAsistencia(ofstream &ArchivoAsistencia, eAsistencia* asistencia
 
     return eLectura::exitoabrio;
 }
+eOperacion escribirAsistencias(ofstream &archivo, eAsistencia *asistencias, int cant) {
+    ofstream EscribirAsistencias("binary_file_out.bin", ios::binary);
+    if (!EscribirAsistencias.is_open()) {
+        cout << "Error no abrio" << endl;
+        return eOperacion::nofuncion;
+    }
+
+    Asistencia *aux = asistencias;
+
+    for (int i = 0; i < cant; i++) {
+        EscribirAsistencias.write((char *)&aux[i].idCliente, sizeof(uint));
+        EscribirAsistencias.write((char *)&aux[i].cantInscriptos, sizeof(uint));
+        for (uint j = 0; j < aux[i].cantInscriptos; j++) {
+            EscribirAsistencias.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
+        }
+    }
+
+    return eOperacion::funciono;
+}
+
+
+int contarAsistencias(ifstream& Archivo){
+    if (!Archivo.is_open()) {
+        cout << "el archivo no esta abierto" << endl;
+        return 0;
+    }
+    // reiniciar el file al inicio
+    Archivo.clear();
+    Archivo.seekg(0);
+
+    int contAsistencias = -1;
+    uint aux;
+    while (!Archivo.eof()) {
+        Archivo.read((char *)&aux, sizeof(uint));
+        Archivo.read((char *)&aux, sizeof(uint));
+        eInscripcion auxInscripciones;
+        for (uint i = 0; i < aux; i++) {
+            Archivo.read((char *)&auxInscripciones, sizeof(eInscripcion));
+        }
+        contAsistencias++;
+    }
+    return contAsistencias;
+}
+
+eOperacion escribirAsistencias(eAsistencia* asistencias,uint cant,time_t hoy){
+    ofstream fileOutPut(&"../../"[hoy]);
+}
+
 
 
