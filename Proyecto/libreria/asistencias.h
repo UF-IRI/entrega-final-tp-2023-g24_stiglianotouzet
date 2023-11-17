@@ -22,8 +22,13 @@ struct Asistencia{
 };typedef struct Asistencia eAsistencia;
 
 Asistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned int nuevoTam);
-eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias);
-eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant);
-eLectura devolverAsistencia(ofstream &ArchivoAsistencia, eAsistencia* asistencias, int cant);
-eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,unsigned int cant,time_t hoy);
+void imprimirAsistencias(eAsistencia *asistencias, int cant);
+void resizeasistencias(eAsistencia **miLista, uint tam, uint nuevoTam);
+void imprimirAsistencias(eAsistencia *asistencias, int cant);
+eOperacion agregarAsistencia(eAsistencia* asistencias,uint cant ,eAsistencia asistencia);
+int ContarAsistencia(ifstream &archivoAsistencia);
+eOperacion EscribirAsistencia(eAsistencia *asistencias, uint cant, str hoy);
+eAsistencia* BuscarxAsistencia(eAsistencia* asistencias,uint cant ,str idCliente);
+eOperacion agregarInscripcion(eInscripcion* inscripciones,uint cant,eInscripcion inscripcion);
+
 #endif // ASISTENCIAS_H

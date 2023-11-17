@@ -10,7 +10,11 @@ typedef std::string str;
 
 struct clases{
 
-    str idClase, horario, nombreclase;
+    str idClase, nombreclase;
+    int capacidadMaxima;
+    str* horario;
+    int contHorario;
+    int largo;
     unsigned int cupo;//si el cupo es 0 es xq es musculacion
 };typedef struct clases eClases;
 
@@ -38,7 +42,7 @@ struct gimnasio {
     unsigned int cantReservas;
 };typedef struct gimnasio eGimnasio;
 
-enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-1, ClienteExistente=1, Clasenula=-1, Claseexistente=1,Horariorepetido=-1, HorarioDisponible=1, Nohayespacio=-1};
+enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-1, ClienteExistente=1, Clasenula=-1, Claseexistente=1,Horariorepetido=-1, HorarioDisponible=1, Nohayespacio=-1,exito=1,error=-1};
 typedef enum turnos eTurnos;
 //funcion de leer el archivo de clases
 eLectura ArchivoClases(eClases* clases,ifstream& archivo);
@@ -58,4 +62,6 @@ eReserva estaClienteEnReserva(eGimnasio* gimnasio, str idCliente, str idClase);
 eTurnos HorarioRepetido(eReserva* reserva, unsigned int cant, unsigned int horario, str ID);
 //cliente repetido
 eTurnos ClienteRepetido(str *inscriptions, unsigned int cant, str idClient);
+//contar clases
+int ContarClases(ifstream& archivo, int realCantClases);
 #endif // CLASES_H

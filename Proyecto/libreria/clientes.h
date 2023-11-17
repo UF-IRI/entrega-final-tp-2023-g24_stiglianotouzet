@@ -21,11 +21,15 @@ struct clientes{
 
 const eClientes clienteNulo{"", "", "", "", "", "", 0};
 //leer clientes del archivo
-eLectura ArchivoClientes(eClientes* clientes,ifstream& archivo);
+eLectura ArchivoClientes(eClientes* clientes,ifstream& file);
+//reemplazar caracteres
+void ReemplazarCaracteres(string &linea, string buscar,string reemplazar);
+//imprimir clientes
+void ImprimirClientes(eClientes *clientes, int cant);
 //buscar por id
-eClientes BuscarxID(eClientes* clientes,unsigned int cant, str id);
-//retorno cliente
-bool existeCliente(eClientes* clientes,unsigned int cant, str id);
+eClientes BuscarxCliente(eClientes *clientes, uint cant, str id);
+//Cliente existente?
+bool ClienteExistente(eClientes *clientes, uint cant, str id);
 
 #endif // CLIENTES_H
 

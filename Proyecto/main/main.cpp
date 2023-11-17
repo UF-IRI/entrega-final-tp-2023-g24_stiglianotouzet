@@ -29,15 +29,16 @@ int main() {
     archivoClientes.clear();
     archivoClientes.seekg(0);
     str encabezado;
-    getline(archivoClientes,encabezado);
     str linea;
+    getline(archivoClientes,encabezado);
     int contClientes=0;
     while(getline(archivoClientes,linea))
         contClientes++;
-
-    eClientes* clientes=new eClientes[contClientes];
     eLectura resultadoArchivoCliente;
-    resultadoArchivoCliente=ArchivoClientes(clientes,archivoClientes);
+    eClientes *clientes = new eClientes[contClientes];
+    resultadoArchivoCliente= ArchivoClientes(clientes, archivoClientes);
+
+
 
 
     //------------------------------------CLASES----------------------------------------------------------------
@@ -45,14 +46,18 @@ int main() {
     str encabezadoClases;
     archivoClases.clear();
     archivoClases.seekg(0);
-    getline(archivoClases,encabezadoClases);
-    int contClases=0;
+    /*getline(archivoClases,encabezadoClases);*/
+    /*int contClases=0;
     while(getline(archivoClases,linea))
-        contClases++;
-
+        contClases++;*/
+    int realCantClases;
+    int contClases;
+    contClases= ContarClases(archivoClases,realCantClases);
     eClases* clases=new eClases[contClases];
     eLectura resultadoArchivoClase;
+    eReserva* reservas=new eReserva[realCantClases];
     resultadoArchivoClase=ArchivoClases(clases,archivoClases);
+
 
 
     //---------------------------------ASISTENCIA--------------------------------------------------------------------
@@ -68,18 +73,22 @@ int main() {
         for(unsigned int i=0;i<auxLectura;i++){
             archivoAsistencias.read((char*)&auxInscripciones,sizeof(eInscripcion));
         }
-            contAsistencias++;
-     }
+        contAsistencias++;
+    }
+    eAsistencia* asistencias = new Asistencia[contAsistencias-1];
+    uint n=5;
+    eGimnasio* gimnasio=new eGimnasio({})
+    eGimnasio* gimnasio = new eGimnasio({clientes, contClientes, asistencias, contAsistencias, n, clases, contClases, time(0), reservas, realCantClases});
+
+
+    cout <<"Cant clientes: " << gimnasio->cantClientes<< " - Cant assitances: " << gimnasio->cantAsistencias << " - Cant classes: " << gimnasio->cantClases
+         << " - Cant books: " << gimnasio->cantReservas << " - Today: " << ctime(&gimnasio->hoy)  << endl ;
+
 
 //----------------------------------------PRUEBA BINARIOS--------------------------------
-    cout << "asistencias" << contAsistencias << endl;
-    Asistencia* asistencias = new Asistencia[contAsistencias - 1];
+
     eLectura resultadoAsistencias;
     resultadoAsistencias = ArchivoAsistencia(archivoAsistencias, asistencias);
-    for(int i=0;i<contAsistencias;i++){
-            cout<<""<<asistencias[i].idCliente<<endl;
-
-    }
 
 //---------------------------------------FUNCION RESERVA------------------------------------------
 
@@ -88,6 +97,7 @@ int main() {
 
 
 //--------------------------------ELIMINAR MEMORIA Y CERRAR ARCHIVOS------------------------------
+    delete [] reservas;
     delete [] clientes;
     delete[] clases;
     delete[] asistencias;

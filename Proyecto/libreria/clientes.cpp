@@ -1,38 +1,60 @@
 #include "clientes.h"
+//reemplazar caracteres
+void ReemplazarCaracteres(string &linea, string buscar,string reemplazar) {
+    int pos = linea.find(buscar);
+    while (pos != string::npos) {
+        linea.replace(pos, buscar.size(), reemplazar);
+        pos = linea.find(buscar, pos + reemplazar.size());
+    }
+}
 //funcion de lectura del archivo cliente
-eLectura ArchivoClientes(eClientes* clientes,ifstream& archivo){
-        if(!archivo.is_open())
+eLectura archivoClientes(eClientes *clientes, ifstream &file) {
+        if (!file.is_open())
             return eLectura::Errornoabrio;
-        archivo.clear();
-        archivo.seekg(0);
+        // reiniciar el file al inicio
+        file.clear();
+        file.seekg(0);
 
-        str encabezado;
+        str header;
 
-        getline(archivo, encabezado);
-        eClientes* aux = clientes;
-        while (archivo.good()) {
-            str linea;
-            getline(archivo, linea);
-            if(archivo.eof())
-                break;
-            char delim = ',';
+        getline(file, header);
+        // ELIMINO EL HEADER DE MIERDA DE LAS LINEAS A LEER
+        eClientes *aux = clientes;
+        str line;
+        while (getline(file, line)) {
+            char delimiter = ',';
             string idCliente, nombre, apellido, email, telefono, fechaNac, estado;
-            str field;
-            std::istringstream iss(linea);
-            getline(iss, idCliente, delim);
-            getline(iss, nombre, delim);
-            getline(iss, apellido, delim);
-            getline(iss, email, delim);
-            getline(iss, telefono, delim);
-            getline(iss, fechaNac, delim);
-            getline(iss, estado, delim);
+
+                ReemplazarCaracteres(line, "á", "a");
+                ReemplazarCaracteres(line, "é", "e");
+                ReemplazarCaracteres(line, "í", "i");
+                ReemplazarCaracteres(line, "ó", "o");
+                ReemplazarCaracteres(line, "ú", "u");
+                ReemplazarCaracteres(line, "ñ", "ni");
+                ReemplazarCaracteres(line, "Á", "A");
+                ReemplazarCaracteres(line, "É", "E");
+                ReemplazarCaracteres(line, "Í", "I");
+                ReemplazarCaracteres(line, "Ó", "O");
+                ReemplazarCaracteres(line, "Ú", "U");
+                ReemplazarCaracteres(line, "Ñ", "NI");
+                ReemplazarCaracteres(line, "¿", "");
+                ReemplazarCaracteres(line, "¡", "");
+                std::istringstream iss(line);
+            // IMPORTANTE QUE ESTE EN ESTE ORDEN
+            getline(iss, idCliente, delimiter);
+            getline(iss, nombre, delimiter);
+            getline(iss, apellido, delimiter);
+            getline(iss, email, delimiter);
+            getline(iss, telefono, delimiter);
+            getline(iss, fechaNac, delimiter);
+            getline(iss, estado, delimiter);
             aux->id = idCliente;
-            aux->nombre  = nombre;
-            aux->correo  = email;
-            aux->apellido  = apellido;
-            aux->telefono  = telefono;
-            aux->fechaNac  = fechaNac;
-            aux->estado  = stoi(estado);
+            aux->nombre = nombre;
+            aux->correo = email;
+            aux->apellido = apellido;
+            aux->telefono = telefono;
+            aux->fechaNac = fechaNac;
+            aux->estado = stoi(estado);
             aux++;
         }
 
@@ -40,11 +62,27 @@ eLectura ArchivoClientes(eClientes* clientes,ifstream& archivo){
 }
 
 
-eClientes BuscarxID(eClientes* clientes,unsigned int cant, str id) {
-        eClientes* aux = clientes,
-            * ultimo = (clientes) + cant - 1;
-        while(true) {
-            if (aux->id == id ) {
+void ImprimirClientes(eClientes *clientes, int cant) {
+        eClientes *aux = clientes;
+        eClientes* ultimo = (clientes) + (cant - 1);
+        cout << "clientes:" << endl;
+        if (cant == 0)
+            return;
+
+        while (true) {
+            cout << "id:" << aux->nombre << endl;
+            if (aux == ultimo)
+                break;
+            aux++; // aux = aux + 1 o aux+= 1
+        }
+        cout << "......" << endl;
+}
+
+eClientes BuscarxCliente(eClientes *clientes, uint cant, str id) {
+        eClientes *aux = clientes;
+        eClientes *ultimo = (clientes) + cant - 1;
+        while (true) {
+            if (aux->id == id) {
                 return *aux;
             }
             if (aux == ultimo)
@@ -54,10 +92,12 @@ eClientes BuscarxID(eClientes* clientes,unsigned int cant, str id) {
         return clienteNulo;
 }
 
-bool existeCliente(eClientes* clientes,unsigned int cant, str id){
+bool ClienteExistente(eClientes *clientes, uint cant, str id) {
 
-        return BuscarxID(clientes,cant,id).id != "" ;
+        return BuscarxCliente(clientes, cant, id).id != "";
 }
+
+
 
 
 

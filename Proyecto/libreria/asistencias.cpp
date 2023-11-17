@@ -16,7 +16,20 @@ eAsistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned
 
     return nullptr;
 }
+void resizeasistencias(eAsistencia **miLista, uint tam, uint nuevoTam) {
+    eAsistencia *aux = new eAsistencia[nuevoTam];
 
+    if (aux == nullptr)
+        return;
+
+    uint longitud = (tam < nuevoTam) ? tam : nuevoTam;
+
+    for (uint i = 0; i < longitud; i++)
+        aux[i] = *miLista[i]; // **(miLista + i)
+
+    delete[] *miLista;
+    *miLista = aux;
+}
 eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias){
     if(!ArchivoAsistencia.is_open())
         return eLectura::Errornoabrio;
@@ -46,112 +59,101 @@ eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias)
 
     return eLectura::exitoabrio;
 }
-eOperacion escribirAsistencias(ofstream &archivo, eAsistencia *asistencias, int cant) {
-    ofstream ArchivoAsistencia("binary_file_out.bin", ios::binary);
-    if (!ArchivoAsistencia.is_open()) {
-        cout << "Error no abrio" << endl;
+void imprimirAsistencias(eAsistencia *asistencias, int cant) {
+    eAsistencia *aux = asistencias;
+    eAsistencia *ultimo = (asistencias) + (cant - 1);
+    cout << "asistencia:" << endl;
+    if (cant == 0)
+        return;
+    while (true) {
+        cout << "id:" << aux->idCliente << endl;
+        eInscripcion *aux2 = aux->CursosInscriptos;
+        eInscripcion *ultimo2= (aux->CursosInscriptos)+(aux->cantInscriptos-1) ;
+        cout << "Incripciones:";
+        while (true) {
+            cout << aux2->idClase << ",";
+            if (aux2 == ultimo2)
+                break;
+            aux2++;
+        }
+        cout << endl;
+        if (aux == ultimo)
+            break;
+        aux++;
+    }
+    cout << "................"<< endl;
+}
+eOperacion agregarAsistencia(eAsistencia* asistencias,uint cant ,eAsistencia asistencia){
+    if(cant==0){
+        asistencias[0] = asistencia;
         return eOperacion::nofuncion;
     }
-
-    Asistencia *aux = asistencias;
-
-    for (int i = 0; i < cant; i++) {
-        ArchivoAsistencia.write((char *)&aux[i].idCliente, sizeof(unsigned int));
-        ArchivoAsistencia.write((char *)&aux[i].cantInscriptos, sizeof(unsigned int));
-        for (unsigned int j = 0; j < aux[i].cantInscriptos; j++) {
-            ArchivoAsistencia.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
-        }
-    }
-
+    *(asistencias + cant -1) = asistencia;
+    // miAgenda->*(misContactos + i )
     return eOperacion::funciono;
 }
 
-int contarAsistencias(ifstream& Archivo){
-    if (!Archivo.is_open()) {
-        cout << "el archivo no esta abierto" << endl;
+
+int ContarAsistencia(ifstream &archivoAsistencia) {
+    if (!archivoAsistencia.is_open()) {
+        cout << "No abrio" << endl;
         return 0;
     }
-    Archivo.clear();
-    Archivo.seekg(0);
+    archivoAsistencia.clear();
+    archivoAsistencia.seekg(0);
 
-    int contAsistencias = -1;//empiezo en -1 por el encabezado
-    unsigned int aux;
-    while (!Archivo.eof()) {
-        Archivo.read((char *)&aux, sizeof(unsigned int));
-        Archivo.read((char *)&aux, sizeof(unsigned int));
+    int cantAsistencias = -1;
+    uint aux;
+    while (!archivoAsistencia.eof()) {
+        archivoAsistencia.read((char *)&aux, sizeof(uint));
+        archivoAsistencia.read((char *)&aux, sizeof(uint));
         eInscripcion auxInscripciones;
-        for (unsigned int i = 0; i < aux; i++) {
-            Archivo.read((char *)&auxInscripciones, sizeof(eInscripcion));
+        for (uint i = 0; i < aux; i++) {
+            archivoAsistencia.read((char *)&aux, sizeof(eInscripcion));
         }
-        contAsistencias++;
+        cantAsistencias++;
     }
-    return contAsistencias;
+    return cantAsistencias;
 }
-
-eAsistencia* BuscarxAsistencia(eAsistencia* asistencias,uint cant ,str IDCliente) {
+eOperacion EscribirAsistencia(eAsistencia *asistencias, uint cant, str hoy) {
+    ofstream archivoAsistencia("../../asistencias_" + hoy,ios::binary);
+    if (!archivoAsistencia.is_open()) {
+        return eOperacion::nofuncion;
+    }
+    eAsistencia *aux = asistencias;
+    if (archivoAsistencia.is_open()) {
+        for (uint i = 0; i < cant; i++) {
+            archivoAsistencia.write((char *)&aux[i].idCliente, sizeof(uint));
+            archivoAsistencia.write((char *)&aux[i].cantInscriptos, sizeof(uint));
+            for (uint j = 0; j < aux[i].cantInscriptos; j++) {
+                archivoAsistencia.write((char *)&aux[i].CursosInscriptos[j],
+                                 sizeof(eInscripcion));
+            }
+        }
+    }
+    archivoAsistencia.close();
+    return eOperacion::funciono;
+}
+eAsistencia* BuscarxAsistencia(eAsistencia* asistencias,uint cant ,str idCliente) {
     eAsistencia* aux = asistencias;
-        eAsistencia* ultima = (asistencias) +cant - 1;
+    eAsistencia* ultimo = (asistencias) +cant - 1;
+    if(cant == 0){
+        return nullptr;
+    }
     while(true) {
-        if (aux->idCliente== stoul(IDCliente)) {
+        if (aux->idCliente == stoul(idCliente)) {
             return aux;
         }
-        if (aux == ultima)
+        if (aux == ultimo)
             break;
         aux++;
     }
     return nullptr;
 }
-
-eOperacion EscribirAsistencia(ofstream &file, eAsistencia* asistencias, int cant) {
-    ofstream ArchivoAsistencia("binary_file_out.bin", ios::binary);
-    if (!ArchivoAsistencia.is_open()) {
-        cout << "Error de abertura de Archivo" << endl;
-        return eOperacion::nofuncion;
+eOperacion agregarInscripcion(eInscripcion* inscripciones,uint cant,eInscripcion inscripcion){
+    if(cant == 0){
+        *inscripciones = inscripcion;
     }
-
-    Asistencia *aux = asistencias;
-
-    for (int i = 0; i < cant; i++) {
-        file.write((char *)&aux[i].idCliente, sizeof(unsigned int));
-        file.write((char *)&aux[i].cantInscriptos, sizeof(unsigned int));
-        for (unsigned int j = 0; j < aux[i].cantInscriptos; j++) {
-            file.write((char *)&aux[i].CursosInscriptos[j],
-                       sizeof(eInscripcion));
-        }
-    }
-
+    *(inscripciones + cant - 1) = inscripcion;
     return eOperacion::funciono;
 }
-
-eOperacion EscribirAsistenciaxdia(eAsistencia* asistencia,unsigned int cant,time_t hoy){
-    ofstream ArchivoAsistencia(&"../../"[hoy]);
-}
-eOperacion agregarReserva(eAsistencia* asistencias,uint cant ,eAsistencia asistencia){
-
-    *(asistencias + cant) = asistencia;
-
-    return eOperacion::funciono;
-}
-eOperacion EscribirDiaria(eAsistencia *asistencias, uint cant, str hoy) {
-    ofstream ArchivoAsistencias("../../asistencias_" + hoy,ios::binary);
-    if (!ArchivoAsistencias.is_open()) {
-        return eOperacion::nofuncion;
-    }
-    Asistencia *aux = asistencias;
-    if (ArchivoAsistencias.is_open()) {
-        for (uint i = 0; i < cant; i++) {
-            ArchivoAsistencias.write((char *)&aux[i].idCliente, sizeof(uint));
-            ArchivoAsistencias.write((char *)&aux[i].cantInscriptos, sizeof(uint));
-            for (uint j = 0; j < aux[i].cantInscriptos; j++) {
-                ArchivoAsistencias.write((char *)&aux[i].CursosInscriptos[j],sizeof(eInscripcion));
-            }
-        }
-    }
-    ArchivoAsistencias.close();
-    return eOperacion::nofuncion;
-}
-
-
-
-
-
