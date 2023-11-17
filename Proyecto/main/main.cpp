@@ -34,21 +34,30 @@ int main() {
     unsigned int contClientes = 0;
     while (getline(archivoClientes, linea))
         contClientes++;
-    contClientes--;
-    eClientes *clients = new eClientes[contClientes];
-    eOperacion resClients = ArchivoClientes( clientes,  archivoClientes);
+
+    eClientes *clientes = new eClientes[contClientes];
+    eLectura resultado;
+    resultado= ArchivoClientes( clientes,  archivoClientes);
 
 
     //------------------------------------CLASES----------------------------------------------------------------
 
     str encabezadoClases;
+
     archivoClases.clear();
     archivoClases.seekg(0);
+    int contClases=0;
+    getline(archivoClases,encabezado);
+    while(getline(archivoClases,linea)){
+        contClases++;
+    }
     unsigned int CantClases;
-    unsigned int cantClases = ContarClases(archivoClases,CantClases);
+    unsigned int cantClases = ContarClase(archivoClases,CantClases);
     eClases *clases = new eClases[cantClases];
     eOperacion *reserva = new eOperacion[CantClases];
-   eOperacion resClasses = leerClases(clases, reserva,archivoClases , CantClases);;
+    eOperacion resultado2;
+
+    resultado2= leerClases(clases, reserva, archivoClases , contClases);
 
 
     //---------------------------------ASISTENCIA--------------------------------------------------------------------
@@ -68,9 +77,8 @@ int main() {
     }
     Asistencia *asistencias = new Asistencia[5];
     uint contasistencia = 0;
-    eGimnasio *gim = new eGimnasio({clientes, contClientes, asistencias, contasistencias,
-                                    5, clases,
-                                    contClases, time(0), reservas, realcontClases});
+    eGimnasio *gim = new eGimnasio({clientes, contClientes, asistencias, contAsistencias, 5, clases,
+                                    contClases, time(0), reserva, realcontClases});
 
 
     cout <<"Cant clientes: " << gimnasio->cantClientes<< " - Cant assitances: " << gimnasio->cantAsistencias << " - Cant clases: " << gimnasio->cantClases
@@ -86,9 +94,9 @@ int main() {
     }
 
     cout << "Cant clientes: " << gim->cantClientes
-         << " - Cant assitances: " << gim->cantAsistencias
-         << " - Cant classes: " << gim->contClases
-         << " - Cant books: " << gim->ContReservas
+         << " - Cant asistencias: " << gim->cantAsistencias
+         << " - Cant clases: " << gim->contClases
+         << " - Cant reservas: " << gim->ContReservas
          << " - Today: " << ctime(&gim->hoy) << endl;
 
     imprimirAsistencias(gim->asistencias, gim->cantAsistencias);

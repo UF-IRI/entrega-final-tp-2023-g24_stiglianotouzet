@@ -52,5 +52,5 @@ bool isClientInSchedule(eReserva *reservas, uint cant, uint horario, str idClien
 bool clienteInscripto(str *inscripciones, uint cant, str idClient);
 eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int cant);
 eOperacion buscarClase(eClases *clases, int cant, str name) ;
-
+uint ContarClase(ifstream &file, uint &realCantclases);
 #endif // CLASES_H
