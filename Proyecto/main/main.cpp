@@ -50,9 +50,7 @@ int main() {
 
     eAsistencia *asistencias = new eAsistencia[5];
     uint cantAsistencias = 0;
-    eGimnasio *gimnasio = new eGimnasio({clientes, cantClientes, asistencias, cantAsistencias,
-                              5, clases,
-                              cantClases, time(0), reservas, realCantClases});
+    eGimnasio *gimnasio = new eGimnasio({clientes, cantClientes, asistencias, cantAsistencias,5, clases,cantClases, time(0), reservas, realCantClases});
 
 
 
