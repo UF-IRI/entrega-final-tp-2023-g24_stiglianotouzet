@@ -62,6 +62,9 @@ int main() {
 
 
     imprimirAsistencias(gimnasio->asistencias, gimnasio->cantAsistencias);
+    uint idReserva = genRandomNumber(1, cantClases);
+    uint idCliente = genRandomNumber(1, cantClientes);
+    reservarClase(gimnasio,idReserva, idCliente);
 //----------------CERRAMOS ARCHIVOS----------------------------------------
     delete[] clientes;
     delete[] clases;

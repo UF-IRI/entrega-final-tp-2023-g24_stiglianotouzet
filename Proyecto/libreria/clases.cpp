@@ -82,7 +82,7 @@ eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int c
             contHorario++;
             aux->contHorario += 1;
 
-            // reserva inicial
+            //
             auxReservas->idClase = stoul(idClase);
             auxReservas->cantInscripciones = 0;
             auxReservas->Inscripciones = new string[aux->capacidadMaxima];
