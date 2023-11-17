@@ -83,13 +83,13 @@ void imprimirAsistencias(eAsistencia *asistencias, int cant) {
     }
     cout << "................"<< endl;
 }
+
 eOperacion agregarAsistencia(eAsistencia* asistencias,uint cant ,eAsistencia asistencia){
     if(cant==0){
         asistencias[0] = asistencia;
         return eOperacion::nofuncion;
     }
     *(asistencias + cant -1) = asistencia;
-    // miAgenda->*(misContactos + i )
     return eOperacion::funciono;
 }
 
@@ -157,3 +157,4 @@ eOperacion agregarInscripcion(eInscripcion* inscripciones,uint cant,eInscripcion
     *(inscripciones + cant - 1) = inscripcion;
     return eOperacion::funciono;
 }
+

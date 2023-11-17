@@ -47,10 +47,11 @@ typedef enum turnos eTurnos;
 void imprimirReservas(eReserva* reservas,uint cant);
 eClases encontrarClase(eClases *clases, uint cant, str idClase);
 bool existeReserva(eReserva *reserva, uint cant, uint id);
-eOperacion buscarReserva(eReserva *reserva, uint cant, uint id);
-bool isClientInSchedule(eReserva *reservas, uint cant, uint horario, str idCliente);
+eReserva BuscarxReserva(eReserva *reserva, uint cant, uint id);
+bool HorarioRepetido(eReserva *reservas, uint cant, uint horario, str idCliente);
 bool clienteInscripto(str *inscripciones, uint cant, str idClient);
 eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int cant);
-eOperacion buscarClase(eClases *clases, int cant, str name) ;
+eClases buscarClase(eClases *clases, int cant, str idCLase);
+eOperacion BuscarxClase(eClases *clases, int cant, str nombreClase);
 uint ContarClase(ifstream &file, uint &realCantclases);
 #endif // CLASES_H
