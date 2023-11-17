@@ -81,22 +81,22 @@ int main() {
                                     contClases, time(0), reserva, realcontClases});
 
 
-    cout <<"Cant clientes: " << gimnasio->cantClientes<< " - Cant assitances: " << gimnasio->cantAsistencias << " - Cant clases: " << gimnasio->cantClases
-         << " - Cant books: " << gimnasio->cantReservas << " - Today: " << ctime(&gimnasio->hoy)  << endl ;
+    cout <<"Cant clientes: " << gimnasio->cantCliente<< " - Cant assitances: " << gimnasio->cantAsistencias << " - Cant clases: " << gimnasio->cantClases
+         << " - Cant books: " << gimnasio->cantReserva << " - Today: " << ctime(&gimnasio->hoy)  << endl ;
 
 
 
     for (int i = 0; i < 10; i++) {
-        uint idBook = genRandomNumber(1, realcontClase);
-        uint idClient = genRandomNumber(1, contClientes);
-        eOperacion resultado = reservarClase(*gim, idReserva, to_string(idClient));
-        cout<< "RES: " << res << " - Cant assitances:" << gim->cantAsistencias<< endl;
+        uint idReserva = genRandomNumber(1, realcontClase);
+        uint idCliente = genRandomNumber(1, contClientes);
+        eOperacion resultado = reservarClase(*gim, idReserva, to_string(idCliente));
+        cout<< "RES: " << res << " - Cant asistencias:" << gim->cantAsistencias<< endl;
     }
 
     cout << "Cant clientes: " << gim->cantClientes
          << " - Cant asistencias: " << gim->cantAsistencias
-         << " - Cant clases: " << gim->contClases
-         << " - Cant reservas: " << gim->ContReservas
+         << " - Cant clases: " << gim->cantClases
+         << " - Cant reservas: " << gim->cantReservas
          << " - Today: " << ctime(&gim->hoy) << endl;
 
     imprimirAsistencias(gim->asistencias, gim->cantAsistencias);

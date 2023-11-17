@@ -39,7 +39,7 @@ unsigned int asignarcupos(str clase){
 eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int cant) {
     // SABIENDO QUE ESTA ORDENADO EL ARCHIVO CLASES
     if (!file.is_open())
-        return eCodFile::ErrorOpening;
+        return eOperacion::error;
     // Setear inicio
     file.clear();
     file.seekg(0);
@@ -266,7 +266,7 @@ bool clienteInscripto(str *inscripciones, uint cant, str idClient) {
         if (*auxInscripciones == idClient) {
             return true;
         }
-        if (auxInscripciones == auxUltimaInscripciones)
+        if (auxInscripciones == auxUltimaInscripcion)
             break;
         auxInscripciones++;
     }
