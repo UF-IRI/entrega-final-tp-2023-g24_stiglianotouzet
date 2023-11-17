@@ -31,14 +31,12 @@ int main() {
     str encabezado;
     str linea;
     getline(archivoClientes,encabezado);
-    int contClientes=0;
-    while(getline(archivoClientes,linea))
+    unsigned int contClientes = 0;
+    while (getline(archivoClientes, linea))
         contClientes++;
-    eLectura resultadoArchivoCliente;
-    eClientes *clientes = new eClientes[contClientes];
-    resultadoArchivoCliente= ArchivoClientes(clientes, archivoClientes);
-
-
+    contClientes--;
+    eClientes *clients = new eClientes[contClientes];
+    eOperacion resClients = ArchivoClientes( clientes,  archivoClientes);
 
 
     //------------------------------------CLASES----------------------------------------------------------------
@@ -46,18 +44,11 @@ int main() {
     str encabezadoClases;
     archivoClases.clear();
     archivoClases.seekg(0);
-    /*getline(archivoClases,encabezadoClases);*/
-    /*int contClases=0;
-    while(getline(archivoClases,linea))
-        contClases++;*/
-    int realCantClases;
-    int contClases;
-    contClases= ContarClases(archivoClases,realCantClases);
-    eClases* clases=new eClases[contClases];
-    eLectura resultadoArchivoClase;
-    eReserva* reservas=new eReserva[realCantClases];
-    resultadoArchivoClase=ArchivoClases(clases,archivoClases);
-
+    unsigned int CantClases;
+    unsigned int cantClases = ContarClases(archivoClases,CantClases);
+    eClases *clases = new eClases[cantClases];
+    eOperacion *reserva = new eOperacion[CantClases];
+   eOperacion resClasses = leerClases(clases, reserva,archivoClases , CantClases);;
 
 
     //---------------------------------ASISTENCIA--------------------------------------------------------------------
@@ -107,40 +98,6 @@ int main() {
     archivoAsistencias.close();
     return 0;
 }
-int main() {
-
-    ifstream fileClient("../../iriClientesGYM.csv");
-    ifstream fileClasses("../../iriClasesGYM.csv");
-    ifstream fileAssistances("../../asistencias_1697673600000.dat", ios::binary);
-
-    if (!fileClient.is_open()) {
-        cout << "No pudimos abrir el archivo Clientes" << endl;
-        return 0;
-    }
-    if (!fileClasses.is_open()) {
-        cout << "No pudimos abrir el archivo Clases" << endl;
-        return 0;
-    }
-    if (!fileAssistances.is_open()) {
-        cout << "No pudimos abrir el archivo Asistencias" << endl;
-        return 0;
-    }
-
-    string line;
-    /* CLIENTES */
-    uint countClients = 0;
-    while (getline(fileClient, line))
-        countClients++;
-    countClients--;
-    eClient *clients = new eClient[countClients];
-    eCodFile resClients = leerClientes(clients, fileClient);
-
-    /* Clases */
-    uint realCantClasses;
-    uint cantClasses = countClasses(fileClasses, realCantClasses);
-    eClass *classes = new eClass[cantClasses];
-    eBook *books = new eBook[realCantClasses];
-    eCodFile resClasses = readClasses(classes, books, fileClasses, cantClasses);
 
     /* Asistencias
   int cantAssistances = countAssistences(fileAssistances);
@@ -160,22 +117,7 @@ int main() {
 
 
 
-    // printClients(gymData->clients,gymData->countClients);
 
-    for (int i = 0; i < 10; i++) {
-        uint idBook = genRandomNumber(1, realCantClasses);
-        uint idClient = genRandomNumber(1, countClients);
-        eBookClass res = bookClassGym(*gymData, idBook, to_string(idClient));
-        cout<< "RES: " << res << " - Cant assitances:" << gymData->countAssistances<< endl;
-    }
-
-    cout << "Cant clientes: " << gymData->countClients
-         << " - Cant assitances: " << gymData->countAssistances
-         << " - Cant classes: " << gymData->countClasses
-         << " - Cant books: " << gymData->countBooks
-         << " - Today: " << ctime(&gymData->today) << endl;
-
-    printAssistances(gymData->assistances, gymData->countAssistances);
 
     delete[] clients;
     delete[] classes;
