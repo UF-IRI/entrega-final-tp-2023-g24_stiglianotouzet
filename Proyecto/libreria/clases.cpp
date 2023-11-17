@@ -221,7 +221,7 @@ eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idClient) {
         gimnasio.cantAsistencias = 0;
     } else {
 
-        eInscripcion newInscription = {idReserva,time(0)};
+        eInscripcion nuevaInscripcion = {idReserva,time(0)};
         // CHEQUEAR QUE HAYA ESPACIO
         if (gimnasio.cantAsistencias < gimnasio.cantMaxasistencias) {
             // guardar asistencia
@@ -229,58 +229,59 @@ eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idClient) {
             // chequear si existe
             if (asistencia == nullptr) {
                 // crearla y agregar
-                Asistencia newAssistance = {stoul(idClient),1,new eInscripcion[5]};
-                *newAssistance.CursosInscriptos = newInscription;
+                Asistencia nuevaAsistencia = {stoul(idClient),1,new eInscripcion[5]};
+                *nuevaAsistencia.CursosInscriptos = nuevaInscripcion;
                 gimnasio.cantAsistencias ++;
-                agregarAsistencia(gimnasio.asistencias,gimnasio.cantAsistencias,newAssistance);
+                agregarAsistencia(gimnasio.asistencias,gimnasio.cantAsistencias,nuevaAsistencia);
             } else {
                 // agregar
                 if(asistencia->cantInscriptos < 5){
-                    asistencias->cantInscriptos++;
-                    addInscriptionAssistance(assistance->CursosInscriptos,assistance->cantInscriptos,newInscription);
+                    asistencia->cantInscriptos++;
+                    agregarAsistencia(asistencia->CursosInscriptos,asistencia->cantInscriptos,nuevaInscripcion);
 
                 } else {
-                    return eBookClass::ErrMaxInscriptionsReachedInClass;
+                    return eOperacion::error;
                 }
             }
         } else {
-            resizeAssistences(&gym.assistances, gym.countAssistances,
-                              gym.countMaxAssistances * 2);
-            gym.countAssistances = gym.countMaxAssistances * 2;
-            if (gym.assistances == nullptr) {
-                return eBookClass::ErrSpace;
+            resizeAsistencia(&gimnasio.asistencias, gimnasio.contasistencias,
+                              gimnasio.cantMaxasistencias * 2);
+            gimnasio.cantAsistencias = gimnasio.cantMaxasistencias * 2;
+            if (gimnasio.asistencias == nullptr) {
+                return eOperacion::error;
             }
-            bookClassGym(gym,idBook,idClient);
+            ReservarClase(gimnasio,idReserva,idCliente);
         }
     }
     return eBookClass::SuccessBook;
 }
 
-bool isClientInInscription(str *inscriptions, uint cant, str idClient) {
-    str *auxInscriptions = (inscriptions),
-        *auxLastInscriptions = (inscriptions) + cant - 1;
+bool clienteInscripto(str *inscripciones, uint cant, str idClient) {
+    str *auxInscripciones = (inscripciones),
+        *auxUltimaInscripcion = (inscripciones) + cant - 1;
     if(cant == 0){
         return false;
     }
     while (true) {
-        if (*auxInscriptions == idClient) {
+        if (*auxInscripciones == idClient) {
             return true;
         }
-        if (auxInscriptions == auxLastInscriptions)
+        if (auxInscripciones == auxUltimaInscripciones)
             break;
-        auxInscriptions++;
+        auxInscripciones++;
     }
     return false;
 }
 
-bool isClientInSchedule(eBook *books, uint cant, uint schedule, str idClient) {
-    eBook *aux = books, *ultimo = (books) + cant - 1;
+bool isClientInSchedule(eReserva *reservas, uint cant, uint horario, str idCliente) {
+    eReserva *aux = reservas;
+    eReserva*ultimo = (reservas) + cant - 1;
 
     while (true) {
 
-        if (aux->schedule == schedule) {
-            if (isClientInInscription(aux->inscriptions, aux->countInscriptions,
-                                      idClient)) {
+        if (aux->Horario == horario) {
+            if (clienteInscripto(aux->Inscripciones, aux->cantInscripciones,
+                                      idCliente)) {
                 return true;
             }
         }
@@ -292,47 +293,50 @@ bool isClientInSchedule(eBook *books, uint cant, uint schedule, str idClient) {
     return false;
 }
 
-eBook findBook(eBook *books, uint cant, uint id) {
-    eBook *aux = books, *ultimo = (books) + cant - 1;
+eOperacion buscarReserva(eReserva *reserva, uint cant, uint id) {
+    eReserva *aux = reserva;
+    eReserva *ultimo = (reserva) + cant - 1;
     while (true) {
-        if (aux->idBook == id) {
+        if (aux->idClase == id) {
             return *aux;
         }
         if (aux == ultimo)
             break;
         aux++;
     }
-    return nullBook;
+    return reservaNula;
 }
 
-bool existBook(eBook *books, uint cant, uint id) {
+bool existeReserva(eReserva *reserva, uint cant, uint id) {
 
-    return findBook(books, cant, id).idClass != "";
+    return buscarReserva(reserva, cant, id).idClase != "";
 }
 
-eClass findClass(eClass *classes, uint cant, str idClass) {
-    eClass *aux = classes, *ultimo = (classes) + cant - 1;
+eClases encontrarClase(eClases *clases, uint cant, str idClase) {
+    eClases *aux = clases;
+    eClases *ultimo = (clases) + cant - 1;
     while (true) {
-        if (aux->idClass == idClass) {
+        if (aux->idClase == idClase) {
             return *aux;
         }
         if (aux == ultimo)
             break;
         aux++;
     }
-    return nullClass;
+    return ClaseNula;
 }
 
-void printBooks(eBook* books,uint cant){
-    eBook *aux = books, *last = (books) + (cant - 1);
-    cout << "--------------Books--------------" << endl;
+void imprimirReservas(eReserva* reservas,uint cant){
+    eReserva *aux = reserva;
+    eReserva* last = (reserva) + (cant - 1);
+    cout << "reserva:" << endl;
     while (true) {
-        cout << "Name:" << aux->idBook << endl;
-        cout << "Cant inscriptions:" << aux->countInscriptions << endl;
-        if(aux->countInscriptions){
-            str *auxH = aux->inscriptions,
-                *lastAux = (aux->inscriptions) + (aux->countInscriptions - 1);
-            cout << "Inscriptiones:";
+        cout << "nombre:" << aux->idReserva << endl;
+        cout << "Cantidad de inscripciones:" << aux->cantInscripciones << endl;
+        if(aux->cantInscripciones){
+            str *auxH = aux->Inscripciones,
+                *lastAux = (aux->Inscripciones) + (aux->cantInscripciones - 1);
+            cout << "inscripciones:";
             while (true) {
                 cout << *auxH << ",";
                 if (auxH == lastAux)
