@@ -17,7 +17,7 @@ struct clases{
     int largo;
     unsigned int cupo;//si el cupo es 0 es xq es musculacion
 };typedef struct clases eClases;
-const eClases ClaseNula = { "","",0,"",0,0,0};
+const eClases ClaseNula = { "", "", 0, NULL, 0, 0, 0 };
 struct reserva{
     unsigned int idReserva;
     str idClase;
@@ -42,7 +42,7 @@ struct gimnasio {
     unsigned int cantReservas;
 };typedef struct gimnasio eGimnasio;
 
-enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-2, ClienteExistente=2, Clasenula=-3, Claseexistente=3,Horariorepetido=-4, HorarioDisponible=4, Nohayespacio=-5,exito=6,error=-6};
+enum turnos{estaAnotado=-1,puedeAnotarse=1,Clientenulo=-2, ClientesExistente=2, Clasenula=-3, Claseexistente=3,Horariorepetido=-4, HorarioDisponible=4, Nohayespacio=-5};
 typedef enum turnos eTurnos;
 void imprimirReservas(eReserva* reservas,uint cant);
 eClases encontrarClase(eClases *clases, uint cant, str idClase);

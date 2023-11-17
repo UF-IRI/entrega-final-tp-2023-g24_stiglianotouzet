@@ -179,8 +179,8 @@ uint ContarClase(ifstream &file, uint &realCantclases) {
 
 eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idClient) {
 
-    eReserva reserva = findBook(gimnasio.reservas, gimnasio.cantReservas, idReserva);
-    eClases clase = findClass(gimnasio.clases, gimnasio.cantClases, reserva.idClase);
+    eReserva reserva = buscarReserva(gimnasio.reservas, gimnasio.cantReservas, idReserva);
+    eClases clase = buscarClase(gimnasio.clases, gimnasio.cantClases, reserva.idClase);
 
     // comprobar que la clase existe
     if (reserva.idClase == "") {
@@ -293,7 +293,7 @@ bool isClientInSchedule(eReserva *reservas, uint cant, uint horario, str idClien
     return false;
 }
 
-eOperacion buscarReserva(eReserva *reserva, uint cant, uint id) {
+eReserva buscarReserva(eReserva *reserva, uint cant, uint id) {
     eReserva *aux = reserva;
     eReserva *ultimo = (reserva) + cant - 1;
     while (true) {
@@ -327,8 +327,8 @@ eClases encontrarClase(eClases *clases, uint cant, str idClase) {
 }
 
 void imprimirReservas(eReserva* reservas,uint cant){
-    eReserva *aux = reserva;
-    eReserva* last = (reserva) + (cant - 1);
+    eReserva *aux = reservas;
+    eReserva* last = (reservas) + (cant - 1);
     cout << "reserva:" << endl;
     while (true) {
         cout << "nombre:" << aux->idReserva << endl;

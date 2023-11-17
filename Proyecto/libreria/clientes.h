@@ -10,7 +10,7 @@ typedef std::string str;
 enum lectura{exitoabrio=1, Errornoabrio=-1};
 typedef enum lectura eLectura;
 
-enum operacion{nofuncion=-1, funciono=1};
+enum operacion{nofuncion=-1, funciono=1,error=-2,exito=2};
 typedef enum operacion eOperacion;
 
 struct clientes{
