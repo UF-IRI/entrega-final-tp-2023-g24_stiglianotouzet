@@ -177,29 +177,29 @@ uint ContarClase(ifstream &file, uint &realCantclases) {
     return cantClasses;
 }
 
-eBookClass bookClassGym(eGym &gym, uint idBook, str idClient) {
+eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idClient) {
 
-    eBook bookClass = findBook(gym.books, gym.countBooks, idBook);
-    eClass realClass = findClass(gym.clases, gym.countClasses, bookClass.idClass);
+    eReserva reserva = findBook(gimnasio.reservas, gimnasio.cantReservas, idReserva);
+    eClases clase = findClass(gimnasio.clases, gimnasio.cantClases, reserva.idClase);
 
     // comprobar que la clase existe
-    if (bookClass.idClass == "") {
-        return eBookClass::ErrNonExistentClass;
+    if (reserva.idClase == "") {
+        return eOperacion::Clasenula;
 
         // comprobar que la clase tenga espacio
-    } else if (bookClass.countInscriptions >= realClass.maxCapacity) {
-        return eBookClass::ErrNonNoSpaceInClass;
+    } else if (reserva.cantInscripciones >= clase.capacidadMaxima) {
+        return eOperacion::error;
     }
 
     // comprobar que existe el cliente
-    if (!existClient(gym.clients, gym.countClients, idClient)) {
-        return eBookClass::ErrNonExistentClient;
+    if (!ClienteExistente(gimnasio.clientes, gimnasio.cantClientes, idClient)) {
+        return eOperacion::error;
 
         /* Comprobar que el cliente no este inscripto en otra clase en el mismo
        horario, a su vez chequea que no este en ya inscripto en esta clase */
-    } else if (isClientInSchedule(gym.books, gym.countBooks, bookClass.schedule,
+    } else if (HorarioRepetido(gimnasio.reservas, gimnasio.cantReservas, reserva.Horario,
                                   idClient)) {
-        return eBookClass::ErrClientSubscribedOtherClass;
+        return eOperacion::error;
     }
 
     // revisar si sigue siendo hoy, sino reiniciar asistencias
@@ -213,31 +213,30 @@ eBookClass bookClassGym(eGym &gym, uint idBook, str idClient) {
         str timeAsString;
         ss << now << ',' << endl;
         getline(ss, timeAsString, ',');
-        writeAssistances(gym.assistances, gym.countAssistances, timeAsString);
+        EscribirAsistencia(gimnasio.asistencias, gimnasio.cantAsistencias, timeAsString);
 
         // Reinicio las asistencias y paso de dia
 
-        resizeAssistences(&gym.assistances, gym.countAssistances, 0);
-        gym.countAssistances = 0;
+        resizeasistencias(&gimnasio.asistencias, gimnasio.cantAsistencias, 0);
+        gimnasio.cantAsistencias = 0;
     } else {
 
-        Inscripcion newInscription = {idBook,time(0)};
+        eInscripcion newInscription = {idReserva,time(0)};
         // CHEQUEAR QUE HAYA ESPACIO
-        if (gym.countAssistances < gym.countMaxAssistances) {
+        if (gimnasio.cantAsistencias < gimnasio.cantMaxasistencias) {
             // guardar asistencia
-            Asistencia* assistance =
-                findAssistances(gym.assistances, gym.countAssistances, idClient);
+            Asistencia* asistencia =BuscarxAsistencia(gimnasio.asistencias, gimnasio.cantAsistencias, idClient);
             // chequear si existe
-            if (assistance == nullptr) {
+            if (asistencia == nullptr) {
                 // crearla y agregar
-                Asistencia newAssistance = {stoul(idClient),1,new Inscripcion[DEFAULT_MAX_INSCRIPTIONS_ASSITANCES_CAPACITY]};
+                Asistencia newAssistance = {stoul(idClient),1,new eInscripcion[5]};
                 *newAssistance.CursosInscriptos = newInscription;
-                gym.countAssistances ++;
-                addAssistance(gym.assistances,gym.countAssistances,newAssistance);
+                gimnasio.cantAsistencias ++;
+                agregarAsistencia(gimnasio.asistencias,gimnasio.cantAsistencias,newAssistance);
             } else {
                 // agregar
-                if(assistance->cantInscriptos < DEFAULT_MAX_INSCRIPTIONS_ASSITANCES_CAPACITY){
-                    assistance->cantInscriptos++;
+                if(asistencia->cantInscriptos < 5){
+                    asistencias->cantInscriptos++;
                     addInscriptionAssistance(assistance->CursosInscriptos,assistance->cantInscriptos,newInscription);
 
                 } else {
