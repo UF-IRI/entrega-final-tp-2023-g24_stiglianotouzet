@@ -62,9 +62,9 @@ int main() {
          << " - cant Reservas: " << gimnasio->cantReservas
          << " - dia: " << ctime(&gimnasio->hoy) << endl;
 
-//----------------CERRAMOS ARCHIVOS----------------------------------------
-    imprimirAsistencias(gimnasio->asistencias, gimnasio->cantAsistencias);
 
+    imprimirAsistencias(gimnasio->asistencias, gimnasio->cantAsistencias);
+//----------------CERRAMOS ARCHIVOS----------------------------------------
     delete[] clientes;
     delete[] clases;
     delete[] asistencias;
