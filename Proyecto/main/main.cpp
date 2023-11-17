@@ -88,7 +88,7 @@ int main() {
 
 
 //--------------------------------ELIMINAR MEMORIA Y CERRAR ARCHIVOS------------------------------
-    delete [] reservas;
+    delete [] reserva;
     delete [] clientes;
     delete[] clases;
     delete[] asistencias;
