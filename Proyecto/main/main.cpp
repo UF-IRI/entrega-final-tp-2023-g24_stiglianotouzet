@@ -66,22 +66,32 @@ int main() {
         }
         contAsistencias++;
     }
-    eAsistencia* asistencias = new Asistencia[contAsistencias-1];
-    uint n=5;
-    eGimnasio* gimnasio=new eGimnasio({})
-    eGimnasio* gimnasio = new eGimnasio({clientes, contClientes, asistencias, contAsistencias, n, clases, contClases, time(0), reservas, realCantClases});
+    Asistencia *asistencias = new Asistencia[5];
+    uint contasistencia = 0;
+    eGimnasio *gim = new eGimnasio({clientes, contClientes, asistencias, contasistencias,
+                                    5, clases,
+                                    contClases, time(0), reservas, realcontClases});
 
 
-    cout <<"Cant clientes: " << gimnasio->cantClientes<< " - Cant assitances: " << gimnasio->cantAsistencias << " - Cant classes: " << gimnasio->cantClases
+    cout <<"Cant clientes: " << gimnasio->cantClientes<< " - Cant assitances: " << gimnasio->cantAsistencias << " - Cant clases: " << gimnasio->cantClases
          << " - Cant books: " << gimnasio->cantReservas << " - Today: " << ctime(&gimnasio->hoy)  << endl ;
 
 
-//----------------------------------------PRUEBA BINARIOS--------------------------------
 
-    eLectura resultadoAsistencias;
-    resultadoAsistencias = ArchivoAsistencia(archivoAsistencias, asistencias);
+    for (int i = 0; i < 10; i++) {
+        uint idBook = genRandomNumber(1, realcontClase);
+        uint idClient = genRandomNumber(1, contClientes);
+        eOperacion resultado = reservarClase(*gim, idReserva, to_string(idClient));
+        cout<< "RES: " << res << " - Cant assitances:" << gim->cantAsistencias<< endl;
+    }
 
-//---------------------------------------FUNCION RESERVA------------------------------------------
+    cout << "Cant clientes: " << gim->cantClientes
+         << " - Cant assitances: " << gim->cantAsistencias
+         << " - Cant classes: " << gim->contClases
+         << " - Cant books: " << gim->ContReservas
+         << " - Today: " << ctime(&gim->hoy) << endl;
+
+    imprimirAsistencias(gim->asistencias, gim->cantAsistencias);
 
 
 
@@ -99,32 +109,3 @@ int main() {
     return 0;
 }
 
-    /* Asistencias
-  int cantAssistances = countAssistences(fileAssistances);
-  cout << "assitencias" << cantAssistances << endl;
-  Asistencia *assitances = new Asistencia[cantAssistances - 1];
-  eCodFile resAssistances = readAssistances(fileAssistances, assitances);
-*/
-
-    // printClasses(classes,cantClasses);
-    // printAssistances(assitances,cantAssistances);
-    // printClients(clients,countClients);
-    Asistencia *assitances = new Asistencia[DEFAULT_MAX_ASSITANCES_CAPACITY];
-    uint countAssitances = 0;
-    eGym *gymData = new eGym({clients, countClients, assitances, countAssitances,
-                              DEFAULT_MAX_ASSITANCES_CAPACITY, classes,
-                              cantClasses, time(0), books, realCantClasses});
-
-
-
-
-
-    delete[] clients;
-    delete[] classes;
-    delete[] assitances;
-    delete[] books;
-    fileClient.close();
-    fileClasses.close();
-    fileAssistances.close();
-    return 0;
-}
