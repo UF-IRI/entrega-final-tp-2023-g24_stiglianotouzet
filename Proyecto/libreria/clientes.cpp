@@ -48,7 +48,7 @@ eLectura archivoClientes(eClientes *clientes, ifstream &file) {
             getline(iss, telefono, delimiter);
             getline(iss, fechaNac, delimiter);
             getline(iss, estado, delimiter);
-            aux->id = idCliente;
+            aux->id = stoi(idCliente);
             aux->nombre = nombre;
             aux->correo = email;
             aux->apellido = apellido;
@@ -78,7 +78,7 @@ void ImprimirClientes(eClientes *clientes, int cant) {
         cout << "......" << endl;
 }
 
-eClientes BuscarxCliente(eClientes *clientes, uint cant, str id) {
+eClientes BuscarxCliente(eClientes *clientes, uint cant, uint id) {
         eClientes *aux = clientes;
         eClientes *ultimo = (clientes) + cant - 1;
         while (true) {
@@ -92,9 +92,9 @@ eClientes BuscarxCliente(eClientes *clientes, uint cant, str id) {
         return clienteNulo;
 }
 
-bool ClienteExistente(eClientes *clientes, uint cant, str id) {
+bool ClienteExistente(eClientes *clientes, uint cant, uint id) {
 
-        return BuscarxCliente(clientes, cant, id).id != "";
+        return BuscarxCliente(clientes, cant, id).id != 0;
 }
 
 

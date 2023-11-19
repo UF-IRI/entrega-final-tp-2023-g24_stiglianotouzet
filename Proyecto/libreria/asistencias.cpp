@@ -59,7 +59,7 @@ eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias)
 
     return eLectura::exitoabrio;
 }
-void imprimirAsistencias(eAsistencia *asistencias, int cant) {
+void RetornoAsistencias(eAsistencia *asistencias, int cant) {
     eAsistencia *aux = asistencias;
     eAsistencia *ultimo = (asistencias) + (cant - 1);
     cout << "asistencia:" << endl;

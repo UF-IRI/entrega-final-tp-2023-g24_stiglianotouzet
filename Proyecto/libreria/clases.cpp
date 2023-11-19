@@ -2,7 +2,7 @@
 #include "asistencias.cpp"
 //funcion de asignar cupo a la clase
 
-eClases BuscarClase(eClases *clases, int cant, str idCLase) {
+eClases BuscarClase(eClases *clases, int cant, uint idCLase) {
     eClases *aux = clases;
     eClases* ultimo = (clases) + cant - 1;
     while (true) {
@@ -86,7 +86,6 @@ eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int c
             auxReservas->idClase = stoul(idClase);
             auxReservas->cantInscripciones = 0;
             auxReservas->Inscripciones = new string[aux->capacidadMaxima];
-            auxReservas->idClase = aux->idClase;
             auxReservas->Horario = stoul(horario);
 
         } else if (nombre != "Musculacion" && nombre != aux->nombreclase) {
@@ -95,7 +94,7 @@ eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int c
             } else {
                 firstLine = false;
             }
-            aux->idClase = idClase;
+            aux->idClase = stoi(idClase);
             aux->nombreclase = nombre;
             aux->largo = 60;
             aux->capacidadMaxima = 45;
@@ -191,10 +190,9 @@ uint ContarClase(ifstream &file, uint &realCantclases) {
 
     return cantClasses;
 }
-
-eClases encontrarClase(eClases *clases, uint cant, str idClase) {
+eClases encontrarClase(eClases *clases, uint cant, uint idClase) {
     eClases *aux = clases;
-    eClases *ultimo = (clases) + cant - 1;
+    eClases *ultimo = clases + cant - 1;
     while (true) {
         if (aux->idClase == idClase) {
             return *aux;
@@ -203,16 +201,17 @@ eClases encontrarClase(eClases *clases, uint cant, str idClase) {
             break;
         aux++;
     }
+    // Assuming ClaseNula is a default instance of eClases with appropriate values
     return ClaseNula;
 }
-eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idCliente) {
+eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, uint idCliente) {
 
     eReserva reserva;
     reserva= BuscarxReserva(gimnasio.reservas, gimnasio.cantReservas, idReserva);
     eClases realClase=encontrarClase(gimnasio.clases, gimnasio.cantClases, reserva.idClase);
 
     // comprobar que la clase existe
-    if (reserva.idClase == "") {
+    if (reserva.idClase == 0) {
         return eOperacion::error;
 
         // comprobar que la clase tenga espacio
@@ -226,8 +225,7 @@ eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idCliente) {
 
         /* Comprobar que el cliente no este inscripto en otra clase en el mismo
        horario, a su vez chequea que no este en ya inscripto en esta clase */
-    } else if (HorarioRepetido(gimnasio.reservas, gimnasio.cantReservas, reserva.Horario,
-                                  idCliente)) {
+    } else if (HorarioRepetido(gimnasio.reservas, gimnasio.cantReservas, reserva.Horario,idCliente)) {
         return eOperacion::error;
     }
 
@@ -287,8 +285,10 @@ eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, str idCliente) {
 
 
 bool clienteInscripto(str *inscripciones, uint cant, str idClient) {
-    str *auxInscripciones = (inscripciones),
-        *auxUltimaInscripcion = (inscripciones) + cant - 1;
+    str *auxInscripciones;
+    str* ultimaInscripcion;
+    auxInscripciones= (inscripciones);
+    ultimaInscripcion = (inscripciones) + cant - 1;
     if(cant == 0){
         return false;
     }
@@ -296,14 +296,14 @@ bool clienteInscripto(str *inscripciones, uint cant, str idClient) {
         if (*auxInscripciones == idClient) {
             return true;
         }
-        if (auxInscripciones == auxUltimaInscripcion)
+        if (auxInscripciones == ultimaInscripcion)
             break;
         auxInscripciones++;
     }
     return false;
 }
 
-bool HorarioRepetido(eReserva *reservas, uint cant, uint horario, str idCliente) {
+eOperacion HorarioRepetido(eReserva *reservas, uint cant, uint horario, str idCliente) {
     eReserva *aux = reservas;
     eReserva*ultimo = (reservas) + cant - 1;
 
@@ -312,7 +312,7 @@ bool HorarioRepetido(eReserva *reservas, uint cant, uint horario, str idCliente)
         if (aux->Horario == horario) {
             if (clienteInscripto(aux->Inscripciones, aux->cantInscripciones,
                                       idCliente)) {
-                return true;
+                eOperacion::exito ;
             }
         }
 
@@ -320,7 +320,7 @@ bool HorarioRepetido(eReserva *reservas, uint cant, uint horario, str idCliente)
             break;
         aux++;
     }
-    return false;
+    eOperacion::error;
 }
 
 eReserva BuscarxReserva(eReserva *reserva, uint cant, uint id) {
@@ -339,7 +339,7 @@ eReserva BuscarxReserva(eReserva *reserva, uint cant, uint id) {
 
 bool existeReserva(eReserva *reserva, uint cant, uint id) {
 
-    return BuscarxReserva(reserva, cant, id).idClase != "";
+    return BuscarxReserva(reserva, cant, id).idClase != 0;
 }
 
 
@@ -374,10 +374,10 @@ void imprimirReservas(eReserva* reservas,uint cant){
     cout << "---------------------------------------" << endl;
 }
 
-uint genRandomNumber(uint min,uint max){
+uint numeroRandom(uint min,uint max){
     srand((unsigned) time(0));
-    uint randomNumber;
-    randomNumber = (rand() % max) + min;
-    return randomNumber;
+    uint num;
+    num = (rand() % max) + min;
+    return num;
 }
 
