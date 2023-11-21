@@ -24,7 +24,7 @@ struct reserva{
     uint idClase;
     uint  Horario;
     str* Inscripciones;
-    int cantInscripciones;
+    uint cantInscripciones;
 };typedef struct reserva eReserva;
 const eReserva reservaNula = { 0,0,0,NULL,0};
 
