@@ -9,7 +9,7 @@ using namespace std;
 
 
 int main() {
-   //----------------ABRIMOS ARCHIVOS---------------------------
+   //----------------ABRIMOS ARCHIVOS-------------------------------------
     ifstream archivoCliente("../../iriClientesGYM.csv");
     ifstream archivoClases("../../iriClasesGYM.csv");
     ifstream archivoAsistencias("../../asistencias_1697673600000.dat", ios::binary);
@@ -28,7 +28,7 @@ int main() {
     }
 
     string linea;
-   //-------------------_CLIENTES--------------------------
+   //-------------------_CLIENTES----------------------------------------
     str encabezado;
     uint cantClientes = 0;
     getline(archivoCliente,encabezado);
@@ -38,7 +38,8 @@ int main() {
     eLectura resultadoClientes;
     resultadoClientes= ArchivoClientes(clientes, archivoCliente);
 
-    //----------------CLASES------------------------
+    //----------------CLASES-----------------------------------------------
+
     getline(archivoClases,encabezado);
     uint cantClases=0;
     while(getline(archivoClases,linea)){
@@ -47,7 +48,8 @@ int main() {
     eClases *clases = new eClases[cantClases];
     eLectura resultadoClases;
     resultadoClases= leerClases(clases, archivoClases);
-    //----------------ASISTENCIAS----------------------------------
+    //----------------ASISTENCIAS-------------------------------------------
+
     uint buffer;
     uint cantAsistencias = -1;
 
@@ -65,6 +67,7 @@ int main() {
     resultadoAsistencias= ArchivoAsistencia(archivoAsistencias, asistencias);
 
   //------------------INSCRIPCION-------------------------------------------
+
     uint idReserva = numeroRandom(1, cantClases);
     uint idCliente = numeroRandom(1, cantClientes);
     eReserva* reservas;
