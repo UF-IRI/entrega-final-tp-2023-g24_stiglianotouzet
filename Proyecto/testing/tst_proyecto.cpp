@@ -1,8 +1,7 @@
 #include <catch2/catch.hpp>
 #include "asistencias.h"
-#include "clases.h"
 #include "clientes.h"
-#include "clases.cpp"
+#include "clases.h"
 
 TEST_CASE("My first test with Catch2", "[fancy]")
 {
