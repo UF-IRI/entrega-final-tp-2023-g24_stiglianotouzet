@@ -17,7 +17,7 @@ struct clases{
     uint horario;
     unsigned int cupo;//si el cupo es 0 es xq es musculacion
 };typedef struct clases eClases;
-const eClases ClaseNula = { 0,"",0,0,0};
+const eClases ClaseNula = { 0,"",0,0,0,0};
 
 struct reserva{
     uint  idReserva;
@@ -26,7 +26,7 @@ struct reserva{
     str* Inscripciones;
     int cantInscripciones;
 };typedef struct reserva eReserva;
-const eReserva reservaNula = { 0,0,0,0,0};
+const eReserva reservaNula = { 0,0,0,NULL,0};
 
 
 struct gimnasio {

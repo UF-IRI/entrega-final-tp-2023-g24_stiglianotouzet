@@ -9,7 +9,7 @@ TEST_CASE("My first test with Catch2", "[fancy]")
     REQUIRE(0 == 0);
 }
 
-/*TEST_CASE("FUNCION ASIGNAR CUPOS") {
+TEST_CASE("FUNCION ASIGNAR CUPOS") {
     string yoga="yoga";
     string pilates="pilates";
     string stretching="stretching";
@@ -39,5 +39,5 @@ TEST_CASE("My first test with Catch2", "[fancy]")
 
 
 
-};*/
+};
 

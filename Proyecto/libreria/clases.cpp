@@ -172,6 +172,9 @@ eOperacion reservar(eGimnasio *gimnasio, uint idReserva, uint idCliente) {
     if (HorarioRepetido(gimnasio->reservas, gimnasio->cantReservas, ReservarClase.Horario, idCliente) || ClienteRepetido(gimnasio->reservas->Inscripciones, gimnasio->reservas->cantInscripciones, idCliente)) {
         return eOperacion::error;
     }
+    if(gimnasio->cantAsistencias>=gimnasio->cantMaxasistencias){
+        ResizeAsistencia(gimnasio->asistencias, gimnasio->cantAsistencias, gimnasio->cantAsistencias*2);//asi no lo tengo que hacer todo el tiempo
+    }
     uint ClasesmaxCliente = numeroRandom(1, 5);
     EscribirAsistencias(gimnasio->asistencias, ClasesmaxCliente);
     return eOperacion::exito;
