@@ -1,6 +1,8 @@
 #include "clases.h"
 #include "asistencias.cpp"
-//funcion de asignar cupo a la clase
+
+
+//funcion de buscar clase
 
 eOperacion BuscarClase(eClases *clases, int cant, str nombreClase) {
     eClases *aux = clases;
@@ -15,6 +17,7 @@ eOperacion BuscarClase(eClases *clases, int cant, str nombreClase) {
     }
     return eOperacion::error;
 }
+//funcion de asignar cupos
 unsigned int asignarcupos(str clase){
     unsigned int cupo=0;
     if(clase=="Spinning" || clase=="spinning"){
@@ -37,7 +40,7 @@ unsigned int asignarcupos(str clase){
     }
     return cupo;
 }
-
+//funcion leer archivo clase
 eLectura leerClases(eClases* clases, ifstream& ArchivoClases){
     ArchivoClases.clear();
     ArchivoClases.seekg(0);
@@ -61,7 +64,7 @@ eLectura leerClases(eClases* clases, ifstream& ArchivoClases){
     return eLectura::exitolectura;
 }
 
-
+//funcion crear numero random
 uint numeroRandom(uint min, uint max){
     uint n;
     n = (rand() % max) + min;
@@ -69,7 +72,7 @@ uint numeroRandom(uint min, uint max){
 }
 
 
-
+//funcion fijarse si el cliente no esta repetido
 bool ClienteRepetido(str* incripciones, uint cant, uint idCliente){
     str *aux = incripciones;
     str *ultimoInscripto = incripciones + (cant - 1);
@@ -83,6 +86,8 @@ bool ClienteRepetido(str* incripciones, uint cant, uint idCliente){
     }
     return false;
 }
+
+//funcion horario repetido
 
 bool HorarioRepetido(eReserva* reserva, uint cant, uint horario, uint idCliente) {
     eReserva* aux = reserva;
@@ -107,6 +112,8 @@ bool HorarioRepetido(eReserva* reserva, uint cant, uint horario, uint idCliente)
     return false;
 }
 
+//funcion buscar por reserva
+
 eReserva buscarxReserva(eReserva *reservas, uint cant, uint reserva) {
     eReserva *aux = reservas;
     eReserva*ultimareserva = reservas + (cant - 1);
@@ -120,6 +127,8 @@ eReserva buscarxReserva(eReserva *reservas, uint cant, uint reserva) {
     }
     return reservaNula;
 }
+
+//funcion buscar por cliente
 
 eClientes buscarxCliente(eGimnasio* gimnasio, uint idCliente) {
     eClientes* aux = gimnasio->clientes;
@@ -135,12 +144,16 @@ eClientes buscarxCliente(eGimnasio* gimnasio, uint idCliente) {
     return clienteNulo;
 }
 
+//funcion chequear estado
+
 bool Estado(eClientes cliente){
     if(stol(cliente.estado) >= 0){
         return true;
     }
     return false;
 }
+//funcion buscar x clase
+
 eClases buscarxClase(eClases *clases, uint cant, uint idClase) {
     eClases* aux = clases;
     eClases* ultimaClase = clases + (cant - 1);
@@ -154,6 +167,8 @@ eClases buscarxClase(eClases *clases, uint cant, uint idClase) {
     }
     return ClaseNula;
 }
+
+//funcion global de reservar clase
 
 eOperacion reservar(eGimnasio *gimnasio, uint idReserva, uint idCliente) {
     eClientes cliente;
@@ -172,6 +187,7 @@ eOperacion reservar(eGimnasio *gimnasio, uint idReserva, uint idCliente) {
     if (HorarioRepetido(gimnasio->reservas, gimnasio->cantReservas, ReservarClase.Horario, idCliente) || ClienteRepetido(gimnasio->reservas->Inscripciones, gimnasio->reservas->cantInscripciones, idCliente)) {
         return eOperacion::error;
     }
+    //agrando el array de asistencias por si me quedo sin espacio
     if(gimnasio->cantAsistencias>=gimnasio->cantMaxasistencias){
         ResizeAsistencia(gimnasio->asistencias, gimnasio->cantAsistencias, gimnasio->cantAsistencias*2);//asi no lo tengo que hacer todo el tiempo lo hago en paquetes
     }
