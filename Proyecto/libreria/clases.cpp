@@ -2,18 +2,18 @@
 #include "asistencias.cpp"
 //funcion de asignar cupo a la clase
 
-eClases BuscarClase(eClases *clases, int cant, uint idCLase) {
+eOperacion BuscarClase(eClases *clases, int cant, str nombreClase) {
     eClases *aux = clases;
-    eClases* ultimo = (clases) + cant - 1;
+    eClases* ultimo = (clases) + (cant - 1);
     while (true) {
-        if (aux->idClase == idCLase) {
-            return *aux;
+        if (aux->nombreclase == nombreClase) {
+            return eOperacion::exito;
         }
         if (aux == ultimo)
             break;
         aux++;
     }
-    return ClaseNula;
+    return eOperacion::error;
 }
 unsigned int asignarcupos(str clase){
     unsigned int cupo=0;
@@ -37,347 +37,142 @@ unsigned int asignarcupos(str clase){
     }
     return cupo;
 }
-eOperacion BuscarxClase(eClases *clases, int cant, str nombreClase){
-    eClases *aux = clases;
-    eClases*ultimo = (clases) + cant - 1;
-    while (true) {
-        if (aux->nombreclase == nombreClase) {
-            return eOperacion::exito;
-        }
-        if (aux == ultimo)
-            break;
-        aux++;
-    }
-    return eOperacion::error;
-}
-eOperacion leerClases(eClases *clases, eReserva *reservas, ifstream &file, int cant) {
-    // SABIENDO QUE ESTA ORDENADO EL ARCHIVO CLASES
-    if (!file.is_open())
-        return eOperacion::error;
-    // Setear inicio
-    file.clear();
-    file.seekg(0);
 
+eLectura leerClases(eClases* clases, ifstream& ArchivoClases){
+    ArchivoClases.clear();
+    ArchivoClases.seekg(0);
     str header;
-    getline(file, header);
-    eClases *aux = clases;
-    eReserva *auxReservas = reservas;
-    str *contHorario;
-    bool firstLine = true;
-    str line;
-    while (getline(file, line)) {
-        char delimiter = ',';
+    getline(ArchivoClases, header);
+    eClases* aux = clases;
+    str linea;
+    while (getline(ArchivoClases,linea)) {
+        char delim = ',';
         string idClase, nombre, horario;
-        str field;
-        std::istringstream iss(line);
-        getline(iss, idClase, delimiter);
-        getline(iss, nombre, delimiter);
-        getline(iss, horario, delimiter);
-
-        eOperacion resultado;
-        resultado= BuscarxClase(clases, cant, nombre);
-
-        if (resultado == eOperacion::funciono && nombre != "Musculacion") {
-            *contHorario = horario;
-            contHorario++;
-            aux->contHorario += 1;
-
-            //
-            auxReservas->idClase = stoul(idClase);
-            auxReservas->cantInscripciones = 0;
-            auxReservas->Inscripciones = new string[aux->capacidadMaxima];
-            auxReservas->Horario = stoul(horario);
-
-        } else if (nombre != "Musculacion" && nombre != aux->nombreclase) {
-            if (!firstLine) {
-                aux++;
-            } else {
-                firstLine = false;
-            }
-            aux->idClase = stoi(idClase);
-            aux->nombreclase = nombre;
-            aux->largo = 60;
-            aux->capacidadMaxima = 45;
-            aux->horario = new str[10];
-            aux->contHorario = 0;
-            contHorario = aux->horario;
-
-            // reserva inicial
-            auxReservas->idReserva = stoul(idClase);
-            auxReservas->cantInscripciones = 0;
-            auxReservas->Inscripciones = new str[aux->capacidadMaxima];
-            auxReservas->idClase = aux->idClase;
-            auxReservas->Horario = stoul(horario);
-        }
-        auxReservas++;
-    }
-
-    return eOperacion::funciono;
-}
-
-
-void imprimirClases(eClases *clases, int cant) {
-    eClases *aux = clases;
-    eClases* ultimo = (clases) + (cant - 1);
-    cout << "clases:" << endl;
-    while (true) {
-        cout << "nombre:" << aux->nombreclase << endl;
-        str *auxHorario = aux->horario;
-        str *ultimoHorario = (aux->horario) + (aux->contHorario - 1);
-        cout << "Horarios:";
-        while (true) {
-            cout << *auxHorario << ",";
-            if (auxHorario == ultimoHorario)
-                break;
-            auxHorario++;
-        }
-        cout << endl;
-        if (aux == ultimo)
-            break;
+        std::istringstream iss(linea);
+        getline(iss, idClase, delim);
+        getline(iss, nombre, delim);
+        getline(iss, horario, delim);
+        aux->idClase = stoi(idClase);
+        aux->nombreclase  = nombre;
+        aux->capacidadMaxima = asignarcupos(nombre);
         aux++;
     }
-    cout << "---------------------------------------" << endl;
+    cout << endl;
+    return eLectura::exitolectura;
 }
 
 
-uint ContarClase(ifstream &file, uint &realCantclases) {
-
-    if (!file.is_open()) {
-        cout << "Error opening binary file" << endl;
-        return 0;
-    }
-    if (realCantclases != 0) {
-        realCantclases = 0;
-    }
-    // reiniciar el file al inicio
-    file.clear();
-    file.seekg(0);
-
-    str line;
-    int cantClasses = 0;
-    str nombres = "";
-    str nombre;
-    getline(file, line); // get header
-    while (getline(file, line)) {
-        std::istringstream iss(line);
-        getline(iss, nombre, ',');
-        getline(iss, nombre, ',');
-        size_t pos = 0;
-        str token;
-        str nombresc = nombres;
-        bool encontrar = false;
-        if (nombresc.length() != 0) {
-            while ((pos = nombresc.find(',')) != std::string::npos) {
-                token = nombresc.substr(0, pos);
-                nombresc.erase(0, pos + 1);
-                if (token == nombre) {
-                    encontrar = true;
-                }
-            }
-            if (!encontrar && nombre.compare("Musculacion") != 0 &&
-                nombre.compare("") != 0) {
-                nombres += nombre + ',';
-                cantClasses++;
-            }
-        } else {
-            nombres = nombre + ',';
-            cantClasses++;
-        }
-        if(nombre.compare("Musculacion") != 0){
-            realCantclases++;
-        }
-    }
-
-    return cantClasses;
+uint numeroRandom(uint min, uint max){
+    uint n;
+    n = (rand() % max) + min;
+    return n;
 }
-eClases encontrarClase(eClases *clases, uint cant, uint idClase) {
-    eClases *aux = clases;
-    eClases *ultimo = clases + cant - 1;
+
+
+
+bool ClienteRepetido(str* incripciones, uint cant, uint idCliente){
+    str *aux = incripciones;
+    str *ultimoInscripto = incripciones + (cant - 1);
     while (true) {
-        if (aux->idClase == idClase) {
-            return *aux;
-        }
-        if (aux == ultimo)
-            break;
-        aux++;
-    }
-    // Assuming ClaseNula is a default instance of eClases with appropriate values
-    return ClaseNula;
-}
-eOperacion reservarClase(eGimnasio &gimnasio, uint idReserva, uint idCliente) {
-
-    eReserva reserva;
-    reserva= BuscarxReserva(gimnasio.reservas, gimnasio.cantReservas, idReserva);
-    eClases realClase=encontrarClase(gimnasio.clases, gimnasio.cantClases, reserva.idClase);
-
-    // comprobar que la clase existe
-    if (reserva.idClase == 0) {
-        return eOperacion::error;
-
-        // comprobar que la clase tenga espacio
-    } else if (reserva.cantInscripciones >= realClase.capacidadMaxima) {
-        return eOperacion::error;
-    }
-
-    // comprobar que existe el cliente
-    if (!ClienteExistente(gimnasio.clientes, gimnasio.cantClientes, idCliente)) {
-        return eOperacion::error;
-
-        /* Comprobar que el cliente no este inscripto en otra clase en el mismo
-       horario, a su vez chequea que no este en ya inscripto en esta clase */
-    } else if (HorarioRepetido(gimnasio.reservas, gimnasio.cantReservas, reserva.Horario,idCliente)) {
-        return eOperacion::error;
-    }
-
-    // revisar si sigue siendo hoy, sino reiniciar asistencias
-    time_t now = time(0);
-    uint diff = difftime(now, gimnasio.hoy) / 60 / 60 / 24;
-    if (diff >= 1) {
-        // siguiente dia
-        gimnasio.hoy = now;
-        // Guardo las asistencias en mi archivo
-        stringstream ss;
-        str timeAsString;
-        ss << now << ',' << endl;
-        getline(ss, timeAsString, ',');
-        EscribirAsistencia(gimnasio.asistencias, gimnasio.cantAsistencias, timeAsString);
-
-        // Reinicio las asistencias y paso de dia
-
-        resizeasistencias(&gimnasio.asistencias, gimnasio.cantAsistencias, 0);
-        gimnasio.cantAsistencias = 0;
-    } else {
-
-        eInscripcion nuevaInscripcion = {idReserva,time(0)};
-        // CHEQUEAR QUE HAYA ESPACIO
-        if (gimnasio.cantAsistencias < gimnasio.cantMaxasistencias) {
-            // guardar asistencia
-            eAsistencia* asistencias;
-                asistencias=BuscarxAsistencia(gimnasio.asistencias, gimnasio.cantAsistencias, idCliente);
-            // chequear si existe
-            if (asistencias == nullptr) {
-                // crearla y agregar
-                eAsistencia nuevaAsistencia = {static_cast<uint>(stoul(idCliente)), 1, new eInscripcion[5]};
-                *nuevaAsistencia.CursosInscriptos = nuevaInscripcion;
-                gimnasio.cantAsistencias ++;
-            } else {
-                // agregar
-                if(asistencias->cantInscriptos < 5){
-                    asistencias->cantInscriptos++;
-                    agregarInscripcion(asistencias->CursosInscriptos,asistencias->cantInscriptos,nuevaInscripcion);
-
-                } else {
-                    return eOperacion::error;
-                }
-            }
-        } else {
-            resizeasistencias(&gimnasio.asistencias,gimnasio.cantAsistencias,
-                              gimnasio.cantMaxasistencias * 2);
-            gimnasio.cantAsistencias = gimnasio.cantMaxasistencias * 2;
-            if (gimnasio.asistencias == nullptr) {
-                return eOperacion::error;
-            }
-            reservarClase(gimnasio,idReserva,idCliente);
-        }
-    }
-    return eOperacion::exito;
-}
-
-
-bool clienteInscripto(str *inscripciones, uint cant, str idClient) {
-    str *auxInscripciones;
-    str* ultimaInscripcion;
-    auxInscripciones= (inscripciones);
-    ultimaInscripcion = (inscripciones) + cant - 1;
-    if(cant == 0){
-        return false;
-    }
-    while (true) {
-        if (*auxInscripciones == idClient) {
+        if (*aux == std::to_string(idCliente)) {
             return true;
         }
-        if (auxInscripciones == ultimaInscripcion)
+        if (aux == ultimoInscripto)//esto significa que llegue al final
             break;
-        auxInscripciones++;
+        aux++;
     }
     return false;
 }
 
-eOperacion HorarioRepetido(eReserva *reservas, uint cant, uint horario, str idCliente) {
-    eReserva *aux = reservas;
-    eReserva*ultimo = (reservas) + cant - 1;
-
+bool HorarioRepetido(eReserva* reserva, uint cant, uint horario, uint idCliente) {
+    eReserva* aux = reserva;
+    eReserva* ultimaReserva = reserva + (cant - 1);
     while (true) {
-
         if (aux->Horario == horario) {
-            if (clienteInscripto(aux->Inscripciones, aux->cantInscripciones,
-                                      idCliente)) {
-                eOperacion::exito ;
+            str* auxInscripciones = aux->Inscripciones;
+            str* ultimaInscripcion = aux->Inscripciones + (aux->cantInscripciones - 1);
+            while (true) {
+                if (*auxInscripciones == std::to_string(idCliente)) {
+                    return true;
+                }
+                if (auxInscripciones == ultimaInscripcion)
+                    break;
+                auxInscripciones++;
             }
         }
-
-        if (aux == ultimo)
+        if (aux == ultimaReserva)
             break;
         aux++;
     }
-    eOperacion::error;
+    return false;
 }
 
-eReserva BuscarxReserva(eReserva *reserva, uint cant, uint id) {
-    eReserva *aux = reserva;
-    eReserva *ultimo = (reserva) + cant - 1;
+eReserva buscarxReserva(eReserva *reservas, uint cant, uint reserva) {
+    eReserva *aux = reservas;
+    eReserva*ultimareserva = reservas + (cant - 1);
     while (true) {
-        if (aux->idReserva == id) {
+        if (aux->idReserva == reserva) {
             return *aux;
         }
-        if (aux == ultimo)
+        if (aux == ultimareserva)
             break;
         aux++;
     }
     return reservaNula;
 }
 
-bool existeReserva(eReserva *reserva, uint cant, uint id) {
-
-    return BuscarxReserva(reserva, cant, id).idClase != 0;
-}
-
-
-
-
-
-void imprimirReservas(eReserva* reservas,uint cant){
-    eReserva *aux = reservas;
-    eReserva* last = (reservas) + (cant - 1);
-    cout << "reserva:" << endl;
-    while (true) {
-        cout << "nombre:" << aux->idReserva << endl;
-        cout << "Cantidad de inscripciones:" << aux->cantInscripciones << endl;
-        if(aux->cantInscripciones){
-            str *auxH = aux->Inscripciones,
-                *lastAux = (aux->Inscripciones) + (aux->cantInscripciones - 1);
-            cout << "inscripciones:";
-            while (true) {
-                cout << *auxH << ",";
-                if (auxH == lastAux)
-                    break;
-                auxH++;
-            }
-            cout << endl;
+eClientes buscarxCliente(eGimnasio* gimnasio, uint idCliente) {
+    eClientes* aux = gimnasio->clientes;
+    eClientes* ultimoCliente = gimnasio->clientes + (gimnasio->cantClientes - 1);
+    while(true) {
+        if (aux->id == idCliente) {
+            return *aux;
         }
-
-        if (aux == last)
+        if (aux == ultimoCliente)
             break;
-
         aux++;
     }
-    cout << "---------------------------------------" << endl;
+    return clienteNulo;
 }
 
-uint numeroRandom(uint min,uint max){
-    srand((unsigned) time(0));
-    uint num;
-    num = (rand() % max) + min;
-    return num;
+bool Estado(eClientes cliente){
+    if(stol(cliente.estado) >= 0){
+        return true;
+    }
+    return false;
+}
+eClases buscarxClase(eClases *clases, uint cant, uint idClase) {
+    eClases* aux = clases;
+    eClases* ultimaClase = clases + (cant - 1);
+    while (true) {
+        if (aux->idClase == idClase) {
+            return *aux;
+        }
+        if (aux == ultimaClase)//llegue al final
+            break;
+        aux++;
+    }
+    return ClaseNula;
 }
 
+eOperacion reservar(eGimnasio *gimnasio, uint idReserva, uint idCliente) {
+    eClientes cliente;
+    cliente= buscarxCliente(gimnasio, idCliente);
+    if(!Estado(cliente)){
+        return eOperacion::CuotaImpaga;
+    }
+    eReserva ReservarClase = buscarxReserva(gimnasio->reservas, gimnasio->cantReservas, idReserva);
+    if (ReservarClase.idClase == 0) {
+        return eOperacion::NoexisteClase;
+    }
+    eClases ClasesnoRepetidas = buscarxClase(gimnasio->clases, gimnasio->cantClases, ReservarClase.idClase);
+    if (ReservarClase.cantInscripciones < ClasesnoRepetidas.capacidadMaxima) {
+        return eOperacion::error;
+    }
+    if (HorarioRepetido(gimnasio->reservas, gimnasio->cantReservas, ReservarClase.Horario, idCliente) || ClienteRepetido(gimnasio->reservas->Inscripciones, gimnasio->reservas->cantInscripciones, idCliente)) {
+        return eOperacion::error;
+    }
+    uint ClasesmaxCliente = numeroRandom(1, 5);
+    EscribirAsistencias(gimnasio->asistencias, ClasesmaxCliente);
+    return eOperacion::exito;
+}

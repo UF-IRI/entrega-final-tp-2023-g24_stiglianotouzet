@@ -40,7 +40,6 @@ eLectura archivoClientes(eClientes *clientes, ifstream &file) {
                 ReemplazarCaracteres(line, "¿", "");
                 ReemplazarCaracteres(line, "¡", "");
                 std::istringstream iss(line);
-            // IMPORTANTE QUE ESTE EN ESTE ORDEN
             getline(iss, idCliente, delimiter);
             getline(iss, nombre, delimiter);
             getline(iss, apellido, delimiter);
@@ -54,7 +53,7 @@ eLectura archivoClientes(eClientes *clientes, ifstream &file) {
             aux->apellido = apellido;
             aux->telefono = telefono;
             aux->fechaNac = fechaNac;
-            aux->estado = stoi(estado);
+            aux->estado = estado;
             aux++;
         }
 

@@ -39,33 +39,43 @@ int main() {
     resultadoClientes= ArchivoClientes(clientes, archivoCliente);
 
     //----------------CLASES------------------------
-    uint realCantClases;
-    uint cantClases = ContarClase(archivoClases, realCantClases);
+    getline(archivoClases,encabezado);
+    uint cantClases=0;
+    while(getline(archivoClases,linea)){
+        cantClases++;
+    }
     eClases *clases = new eClases[cantClases];
-    eReserva *reservas = new eReserva[realCantClases];
-    eOperacion resultadoClases;
-    resultadoClases= leerClases(clases, reservas, archivoClases, cantClases);
-
+    eLectura resultadoClases;
+    resultadoClases= leerClases(clases, archivoClases);
     //----------------ASISTENCIAS----------------------------------
+    uint buffer;
+    uint cantAsistencias = -1;
 
-    eAsistencia *asistencias = new eAsistencia[5];
-    uint cantAsistencias = 0;
-    eGimnasio *gimnasio = new eGimnasio({clientes, cantClientes, asistencias, cantAsistencias,5, clases,cantClases, time(0), reservas, realCantClases});
+    while (!archivoAsistencias.eof()) {
+        archivoAsistencias.read((char *)&buffer, sizeof(uint));
+        archivoAsistencias.read((char *)&buffer, sizeof(uint));
+        eInscripcion auxInscrip;
+        for (uint i = 0; i < buffer; i++) {
+            archivoAsistencias.read((char *)&auxInscrip, sizeof(eInscripcion));
+        }
+        cantAsistencias++;
+    }
+    eAsistencia *asistencias = new eAsistencia[cantAsistencias];
+    eLectura resultadoAsistencias;
+    resultadoAsistencias= ArchivoAsistencia(archivoAsistencias, asistencias);
 
-
-
-    cout << "Cant clientes: " << gimnasio->cantClientes
-         << " - Cant asistencias: " << gimnasio->cantAsistencias
-         << " - Cant clases: " << gimnasio->cantClases
-         << " - cant Reservas: " << gimnasio->cantReservas
-         << " - dia: " << ctime(&gimnasio->hoy) << endl;
-
-
-
-    imprimirAsistencias(gimnasio->asistencias, gimnasio->cantAsistencias);
+  //------------------INSCRIPCION-------------------------------------------
     uint idReserva = numeroRandom(1, cantClases);
     uint idCliente = numeroRandom(1, cantClientes);
-  /*  reservarClase(gimnasio,idReserva, idCliente);*/
+    eReserva* reservas;
+    uint cantReservas;
+    eOperacion resultadoReserva;
+
+    eGimnasio* gimnasio= new eGimnasio({clientes, cantClientes, asistencias, cantAsistencias, 45, clases, cantClases, reservas, cantReservas});
+    resultadoReserva = reservar(gimnasio, idReserva, idCliente);
+    cout<< resultadoReserva;
+
+
 //----------------CERRAMOS ARCHIVOS----------------------------------------
     delete[] clientes;
     delete[] clases;
@@ -76,5 +86,3 @@ int main() {
     archivoAsistencias.close();
     return 0;
 }
-
-

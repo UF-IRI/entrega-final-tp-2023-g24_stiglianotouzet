@@ -7,17 +7,13 @@
 
 using namespace std;
 typedef std::string str;
-enum lectura{exitoabrio=1, Errornoabrio=-1};
+enum lectura{exitoabrio=1, Errornoabrio=-1,exitolectura=2};
 typedef enum lectura eLectura;
-
-enum operacion{nofuncion=-1, funciono=1,error=-2,exito=2};
-typedef enum operacion eOperacion;
 
 struct clientes{
 
     unsigned int id;
-    str nombre, apellido, correo, telefono, fechaNac;
-    int estado;
+    str nombre, apellido, correo, telefono, fechaNac,estado;
 };typedef struct clientes eClientes;
 
 const eClientes clienteNulo{0, "", "", "", "", "", 0};
