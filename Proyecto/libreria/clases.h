@@ -57,6 +57,10 @@ unsigned int asignarcupos(str clase);
 eLectura leerClases(eClases* clases, ifstream& ArchivoClases);
 //horario repetido
 bool HorarioRepetido(eReserva* reserva, uint cant, uint horario, uint idCliente);
+//cliente repetido
+bool ClienteRepetido(str* incripciones, uint cant, uint idCliente);
+//estado del cliente
+bool Estado(eClientes cliente);
 //buscarXreserva
 eReserva buscarxReserva(eReserva *reservas, uint cant, uint reserva);
 //buscarXclase
