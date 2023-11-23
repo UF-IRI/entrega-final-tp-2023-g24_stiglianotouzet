@@ -17,16 +17,17 @@ eAsistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned
     return nullptr;
 }
 void ResizeAsistencia(eAsistencia* miLista, uint tam, uint nuevoTam) {
-    Asistencia* aux = new Asistencia[nuevoTam];
+    eAsistencia* aux = new eAsistencia[nuevoTam];
 
-    uint longitud = (tam <  nuevoTam) ? tam : nuevoTam;
+    uint longitud = (tam < nuevoTam) ? tam : nuevoTam;
 
-    if(aux != nullptr) {
-
-        for(uint i = 0; i < longitud; i++)
+    if (aux != nullptr) {
+        for (uint i = 0; i < longitud; i++)
             aux[i] = miLista[i];
 
         delete[] miLista;
+
+        miLista = aux;
     }
 }
 

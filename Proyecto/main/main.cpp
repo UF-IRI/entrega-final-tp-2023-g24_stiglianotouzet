@@ -80,6 +80,7 @@ int main() {
 
 
 //----------------CERRAMOS ARCHIVOS----------------------------------------
+
     delete[] clientes;
     delete[] clases;
     delete[] asistencias;
@@ -87,5 +88,6 @@ int main() {
     archivoCliente.close();
     archivoClases.close();
     archivoAsistencias.close();
+
     return 0;
 }
