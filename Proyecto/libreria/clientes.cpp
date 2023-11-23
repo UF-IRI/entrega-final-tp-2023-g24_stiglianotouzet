@@ -1,12 +1,14 @@
 #include "clientes.h"
 //reemplazar caracteres
-void ReemplazarCaracteres(string &linea, string buscar,string reemplazar) {
-    int pos = linea.find(buscar);
+
+void ReemplazarCaracteres(string &linea, string buscar, string reemplazar) {
+    string::size_type pos = linea.find(buscar);
     while (pos != string::npos) {
         linea.replace(pos, buscar.size(), reemplazar);
         pos = linea.find(buscar, pos + reemplazar.size());
     }
 }
+
 //funcion de lectura del archivo clientes
 eLectura archivoClientes(eClientes *clientes, ifstream &file) {
         if (!file.is_open())

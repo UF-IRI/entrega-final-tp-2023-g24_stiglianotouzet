@@ -70,8 +70,8 @@ int main() {
 
     uint idReserva = numeroRandom(1, cantClases);
     uint idCliente = numeroRandom(1, cantClientes);
-    eReserva* reservas;
-    uint cantReservas;
+    eReserva* reservas=nullptr;
+    uint cantReservas=0;
     eOperacion resultadoReserva;
 
     eGimnasio* gimnasio= new eGimnasio({clientes, cantClientes, asistencias, cantAsistencias, 45, clases, cantClases, reservas, cantReservas});
