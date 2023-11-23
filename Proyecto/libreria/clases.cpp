@@ -3,7 +3,6 @@
 
 
 //funcion de buscar clase
-
 eOperacion BuscarClase(eClases *clases, int cant, str nombreClase) {
     eClases *aux = clases;
     eClases* ultimo = (clases) + (cant - 1);
@@ -17,6 +16,7 @@ eOperacion BuscarClase(eClases *clases, int cant, str nombreClase) {
     }
     return eOperacion::error;
 }
+
 //funcion de asignar cupos
 unsigned int asignarcupos(str clase){
     unsigned int cupo=0;
@@ -40,6 +40,7 @@ unsigned int asignarcupos(str clase){
     }
     return cupo;
 }
+
 //funcion leer archivo clase
 eLectura leerClases(eClases* clases, ifstream& ArchivoClases){
     ArchivoClases.clear();
@@ -71,7 +72,6 @@ uint numeroRandom(uint min, uint max){
     return n;
 }
 
-
 //funcion fijarse si el cliente no esta repetido
 bool ClienteRepetido(str* incripciones, uint cant, uint idCliente){
     str *aux = incripciones;
@@ -88,7 +88,6 @@ bool ClienteRepetido(str* incripciones, uint cant, uint idCliente){
 }
 
 //funcion horario repetido
-
 bool HorarioRepetido(eReserva* reserva, uint cant, uint horario, uint idCliente) {
     eReserva* aux = reserva;
     eReserva* ultimaReserva = reserva + (cant - 1);
@@ -113,7 +112,6 @@ bool HorarioRepetido(eReserva* reserva, uint cant, uint horario, uint idCliente)
 }
 
 //funcion buscar por reserva
-
 eReserva buscarxReserva(eReserva *reservas, uint cant, uint reserva) {
     eReserva *aux = reservas;
     eReserva*ultimareserva = reservas + (cant - 1);
@@ -129,7 +127,6 @@ eReserva buscarxReserva(eReserva *reservas, uint cant, uint reserva) {
 }
 
 //funcion buscar por cliente
-
 eClientes buscarxCliente(eGimnasio* gimnasio, uint idCliente) {
     eClientes* aux = gimnasio->clientes;
     eClientes* ultimoCliente = gimnasio->clientes + (gimnasio->cantClientes - 1);
@@ -145,15 +142,14 @@ eClientes buscarxCliente(eGimnasio* gimnasio, uint idCliente) {
 }
 
 //funcion chequear estado
-
 bool Estado(eClientes cliente){
     if(stol(cliente.estado) >= 0){
         return true;
     }
     return false;
 }
-//funcion buscar x clase
 
+//funcion buscar x clase
 eClases buscarxClase(eClases *clases, uint cant, uint idClase) {
     eClases* aux = clases;
     eClases* ultimaClase = clases + (cant - 1);
@@ -169,7 +165,6 @@ eClases buscarxClase(eClases *clases, uint cant, uint idClase) {
 }
 
 //funcion global de reservar clase
-
 eOperacion reservar(eGimnasio *gimnasio, uint idReserva, uint idCliente) {
     eClientes cliente;
     cliente= buscarxCliente(gimnasio, idCliente);

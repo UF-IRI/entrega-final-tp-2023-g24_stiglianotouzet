@@ -1,6 +1,5 @@
 #include "clientes.h"
 //reemplazar caracteres
-
 void ReemplazarCaracteres(string &linea, string buscar, string reemplazar) {
     string::size_type pos = linea.find(buscar);
     while (pos != string::npos) {
@@ -62,7 +61,7 @@ eLectura archivoClientes(eClientes *clientes, ifstream &file) {
         return eLectura::exitoabrio;
 }
 
-
+//funcion de imprimir clientes
 void ImprimirClientes(eClientes *clientes, int cant) {
         eClientes *aux = clientes;
         eClientes* ultimo = (clientes) + (cant - 1);
@@ -79,6 +78,7 @@ void ImprimirClientes(eClientes *clientes, int cant) {
         cout << "......" << endl;
 }
 
+//funcion de buscar por id de cliente
 eClientes BuscarxCliente(eClientes *clientes, uint cant, uint id) {
         eClientes *aux = clientes;
         eClientes *ultimo = (clientes) + cant - 1;
@@ -93,6 +93,7 @@ eClientes BuscarxCliente(eClientes *clientes, uint cant, uint id) {
         return clienteNulo;
 }
 
+//funcion de fijarse si un cliente existe
 bool ClienteExistente(eClientes *clientes, uint cant, uint id) {
 
         return BuscarxCliente(clientes, cant, id).id != 0;
