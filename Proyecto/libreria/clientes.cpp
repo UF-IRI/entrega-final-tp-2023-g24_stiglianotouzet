@@ -7,7 +7,7 @@ void ReemplazarCaracteres(string &linea, string buscar,string reemplazar) {
         pos = linea.find(buscar, pos + reemplazar.size());
     }
 }
-//funcion de lectura del archivo cliente
+//funcion de lectura del archivo clientes
 eLectura archivoClientes(eClientes *clientes, ifstream &file) {
         if (!file.is_open())
             return eLectura::Errornoabrio;
