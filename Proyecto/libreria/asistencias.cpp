@@ -1,4 +1,5 @@
 #include "asistencias.h"
+
 //funcion para hacer resize a la asistencia si alguien mas se quiere unir a la clase
 eAsistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned int nuevoTam) {
     eAsistencia* aux = new eAsistencia[nuevoTam];
@@ -16,6 +17,8 @@ eAsistencia* resizeAsistencia(eAsistencia* miLista,  unsigned int tam,  unsigned
 
     return nullptr;
 }
+
+//funcion para hacer resize a la asistencia si alguien mas se quiere unir a la clase
 void ResizeAsistencia(eAsistencia* miLista, uint tam, uint nuevoTam) {
     eAsistencia* aux = new eAsistencia[nuevoTam];
 
@@ -31,6 +34,7 @@ void ResizeAsistencia(eAsistencia* miLista, uint tam, uint nuevoTam) {
     }
 }
 
+//leer archivo asistencia
 eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias){
     if(!ArchivoAsistencia.is_open())
         return eLectura::Errornoabrio;
@@ -60,6 +64,8 @@ eLectura ArchivoAsistencia(ifstream& ArchivoAsistencia,eAsistencia* asistencias)
 
     return eLectura::exitoabrio;
 }
+
+//escribir asistencia
 void EscribirAsistencias(eAsistencia *asistencias, uint cant) {
     ofstream ArchivoAsistencia("../../asistencias_", ios::binary);
     if (!ArchivoAsistencia.is_open()) {
@@ -79,6 +85,7 @@ void EscribirAsistencias(eAsistencia *asistencias, uint cant) {
     }
 }
 
+//buscar por asistencia
 eAsistencia* buscarxAsistencia(eAsistencia* asistencias, uint cant, uint idCliente){
     eAsistencia* aux = asistencias;
     eAsistencia* ultimo = asistencias + (cant - 1);
@@ -96,6 +103,7 @@ eAsistencia* buscarxAsistencia(eAsistencia* asistencias, uint cant, uint idClien
     return nullptr;
 }
 
+//agregar nueva asistencia
 eOperacion NuevaAsistencia(eAsistencia* asistencias, uint cant, Asistencia asistencia){
     if(cant==0){
         asistencias[0] = asistencia;
@@ -105,6 +113,7 @@ eOperacion NuevaAsistencia(eAsistencia* asistencias, uint cant, Asistencia asist
     return eOperacion::error;
 }
 
+//agregar nueva inscripcion
 eOperacion agregarInscripcion(eInscripcion* inscripciones, uint cant, eInscripcion inscripcion){
     if(cant == 0){
         *inscripciones  = inscripcion;
