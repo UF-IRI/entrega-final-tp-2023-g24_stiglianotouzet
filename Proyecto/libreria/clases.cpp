@@ -1,5 +1,5 @@
 #include "clases.h"
-#include "asistencias.cpp"
+
 
 
 //funcion de buscar clase

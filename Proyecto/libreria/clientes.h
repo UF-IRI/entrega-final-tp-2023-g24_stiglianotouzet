@@ -1,15 +1,6 @@
 #ifndef CLIENTES_H
 #define CLIENTES_H
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <string>
-
-using namespace std;
-typedef std::string str;
-enum lectura{exitoabrio=1, Errornoabrio=-1,exitolectura=2};
-typedef enum lectura eLectura;
-
+#include "tipos.h"
 struct clientes{
 
     unsigned int id;

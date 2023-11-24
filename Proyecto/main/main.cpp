@@ -1,11 +1,14 @@
+#include "asistencias.h"
 #include "clientes.h"
 #include "clases.h"
-#include "asistencias.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-using namespace std;
+
+
+
+
+
+
+
+
 
 
 int main() {

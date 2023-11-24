@@ -1,17 +1,6 @@
 #ifndef ASISTENCIAS_H
 #define ASISTENCIAS_H
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <ctime>
-#include "clientes.h"
-
-using namespace std;
-enum Archivo{ ExitoAbrio=1, Noabrio=-1};
-typedef enum Archivo Archi;
-enum operacion{nofuncion=-1, funciono=1,error=-2,exito=2,Clienterep=-1,Horariorep=-1,Cuposagotado=-1,ExitoInscripto,CuotaImpaga=-1,NoexisteClase=-1};
-typedef enum operacion eOperacion;
+#include "tipos.h"
 
 struct sInscripcion{
     unsigned int idClase;

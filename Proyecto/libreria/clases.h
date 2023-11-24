@@ -1,13 +1,8 @@
 #ifndef CLASES_H
 #define CLASES_H
+#include "tipos.h"
 #include "clientes.h"
 #include "asistencias.h"
-#include <iostream>
-#include <string>
-
-using namespace std;
-typedef std::string str;
-
 struct clases{
 
     uint idClase;
@@ -40,14 +35,6 @@ struct gimnasio {
     eReserva* reservas;
     uint  cantReservas;
 };typedef struct gimnasio eGimnasio;
-
-
-
-
-
-
-
-
 
 //buscarXclase
 eOperacion BuscarClase(eClases *clases, int cant, str nombreClase);

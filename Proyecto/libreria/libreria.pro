@@ -18,7 +18,8 @@ HEADERS += \
     clases.h \
     clientes.h \
     libreria_global.h \
-    libreria.h
+    libreria.h \
+    tipos.h
 
 # Default rules for deployment.
 unix {
